@@ -1,4 +1,4 @@
-# frontend-vuetify
+# Product-Management-System-Client-Side
 
 ## Project setup
 ```

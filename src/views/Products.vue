@@ -331,20 +331,7 @@
 			text: "",
 			loading: false,
 			dialogOpen: true,
-			products: [
-				// {
-				// 	id: 1,
-				// 	product_name: "Netflix",
-				// 	product_image:
-				// 		"https://yt3.ggpht.com/ytc/AAUvwni_LdnpDi-SOIhjp4Kxo2l_yVBoYsfdDCpUM5VDzg=s900-c-k-c0x00ffffff-no-rj",
-				// },
-				// {
-				// 	id: 2,
-				// 	product_name: "Spotify",
-				// 	product_image:
-				// 		"https://www.scdn.co/i/_global/twitter_card-default.jpg",
-				// },
-			],
+			products: [],
 			success: false,
 			productName: "",
 			productImage: "",
@@ -390,6 +377,7 @@
 					this.products = await productAPI.prototype.getAllProducts();
 					this.products = this.products.result;
 					// console.log(this.products);
+					this.products.sort((a, b) => a.id - b.id);
 					this.load = false;
 					this.fetched = this.products;
 				} catch (error) {

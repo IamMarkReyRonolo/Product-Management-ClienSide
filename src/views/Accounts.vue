@@ -331,8 +331,6 @@
 				count: 0,
 				dialog: false,
 				dialog2: false,
-				dialog3: false,
-				dialog5: false,
 				id: this.$route.params.id,
 				product: {},
 				loaded: false,
@@ -431,31 +429,7 @@
 					this.dialog2 = false;
 					this.dialog = false;
 					this.snackbar = true;
-
-					// console.log(this.result.data);
-
-					this.product.accounts.push(this.result.data.account);
-				}, 2000);
-			},
-			dialog3(val) {
-				if (!val) return;
-
-				setTimeout(() => {
-					this.text = "Successfully updated product";
-					this.dialog3 = false;
-					this.dialog = false;
-					this.snackbar = true;
-					this.getProducts();
-				}, 2000);
-			},
-			dialog5(val) {
-				if (!val) return;
-
-				setTimeout(() => {
-					this.text = "Successfully deleted product";
-					this.dialog5 = false;
-					this.snackbar = true;
-					this.getProducts();
+					this.getProduct(this.id);
 				}, 2000);
 			},
 		},

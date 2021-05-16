@@ -3,6 +3,7 @@ import VueRouter from "vue-router";
 import Products from "../views/Products.vue";
 import Accounts from "../views/Accounts.vue";
 import Customers from "../views/Customers.vue";
+import SpecificAccount from "../views/SpecificAccount.vue";
 Vue.use(VueRouter);
 
 const routes = [
@@ -13,11 +14,14 @@ const routes = [
 		component: Products,
 	},
 	{
-		// UserProfile will be rendered inside User's <router-view>
-		// when /user/:id/profile is matched
 		path: "/products/:id/accounts",
 		name: "Accounts",
 		component: Accounts,
+	},
+	{
+		path: "/products/:id/accounts/:accountId",
+		name: "SpecificAccount",
+		component: SpecificAccount,
 	},
 	{
 		path: "/customers",

@@ -137,51 +137,6 @@
 																			v-model="newAcc.date_purchased"
 																			class="dateInput"
 																		/>
-
-																		<!-- <v-menu
-																			ref="menu"
-																			v-model="menu01"
-																			:close-on-content-click="false"
-																			:return-value.sync="newAcc.date_purchased"
-																			transition="scale-transition"
-																			offset-y
-																			min-width="auto"
-																			dark
-																		>
-																			<template
-																				v-slot:activator="{ on, attrs }"
-																			>
-																				<v-text-field
-																					v-model="newAcc.date_purchased"
-																					label="Date Purchased"
-																					prepend-icon="mdi-calendar"
-																					readonly
-																					v-bind="attrs"
-																					v-on="on"
-																				></v-text-field>
-																			</template>
-																			<v-date-picker
-																				v-model="newAcc.date_purchased"
-																				no-title
-																				scrollable
-																			>
-																				<v-spacer></v-spacer>
-																				<v-btn
-																					text
-																					color="primary"
-																					@click="menu01 = false"
-																				>
-																					Cancel
-																				</v-btn>
-																				<v-btn
-																					text
-																					color="primary"
-																					@click="menu01 = false"
-																				>
-																					OK
-																				</v-btn>
-																			</v-date-picker>
-																		</v-menu> -->
 																	</v-col>
 
 																	<!--  -->

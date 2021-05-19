@@ -3,7 +3,7 @@ const url = " http://localhost:3000/api/users";
 
 export default class API {
 	async logIn(credentials) {
-		const user = await axios.patch(url + "/login", credentials);
+		const user = await axios.post(url + "/login", credentials);
 		return user;
 	}
 

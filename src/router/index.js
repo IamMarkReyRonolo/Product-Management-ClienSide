@@ -7,12 +7,14 @@ import SpecificAccount from "../views/SpecificAccount.vue";
 import SpecificCustomer from "../views/SpecificCustomer.vue";
 import LandingPage from "../views/LandingPage.vue";
 import LoggedIn from "../views/LoggedIn.vue";
+import PageNotFound from "../views/PageNotFound.vue";
 Vue.use(VueRouter);
 
 const routes = [
+	{ path: "/", redirect: "/welcome" },
 	{ path: "/welcome", name: "LandingPage", component: LandingPage },
 	{
-		path: "/",
+		path: "/verified",
 		name: "LoggedIn",
 		component: LoggedIn,
 		redirect: "/products",
@@ -44,6 +46,7 @@ const routes = [
 			},
 		],
 	},
+	{ path: "*", component: PageNotFound },
 ];
 
 const router = new VueRouter({

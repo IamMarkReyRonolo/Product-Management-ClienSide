@@ -87,12 +87,12 @@
 								text
 								type="submit"
 							>
-								Add Product
+								Add Customer
 							</v-btn>
 							<v-dialog v-model="dialog2" hide-overlay persistent width="300">
 								<v-card color="white" light>
 									<v-card-text>
-										<p mt-5>Adding product. Please wait.</p>
+										<p mt-5>Adding Customer. Please wait.</p>
 										<v-progress-linear
 											indeterminate
 											color="black"
@@ -141,7 +141,14 @@
 								</v-list-item>
 
 								<v-card-actions>
-									<v-btn outlined rounded text light class="white mb-2 ml-2">
+									<v-btn
+										outlined
+										rounded
+										text
+										light
+										class="white mb-2 ml-2"
+										:to="`/customers/${customer.id}`"
+									>
 										View Customer
 									</v-btn>
 									<div class="icoCon" v-show="edit">
@@ -228,7 +235,7 @@
 																	@click="updateCustomer(customer.id)"
 																	type="submit"
 																>
-																	Save Product
+																	Save Customer
 																</v-btn>
 																<v-dialog
 																	v-model="dialog3"
@@ -276,7 +283,7 @@
 												<template v-slot:default="dialog">
 													<v-card dark>
 														<v-card-title class="headline">
-															Delete Product?
+															Delete Customer?
 														</v-card-title>
 														<v-card-text
 															>Deleting this customer will delete all records
@@ -311,7 +318,7 @@
 															>
 																<v-card color="white" light>
 																	<v-card-text>
-																		<p mt-5>Deleting product. Please wait.</p>
+																		<p mt-5>Deleting customer. Please wait.</p>
 																		<v-progress-linear
 																			indeterminate
 																			color="black"

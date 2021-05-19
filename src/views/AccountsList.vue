@@ -150,53 +150,6 @@
 																			v-model="newAcc.date_expires"
 																			class="dateInput"
 																		/>
-
-																		<!-- <v-menu
-																			ref="menu"
-																			v-model="menu02"
-																			:close-on-content-click="false"
-																			:return-value.sync="newAcc.date_expires"
-																			transition="scale-transition"
-																			offset-y
-																			min-width="auto"
-																			dark
-																		>
-																			<template
-																				v-slot:activator="{ on, attrs }"
-																			>
-																				<v-text-field
-																					v-model="newAcc.date_expires"
-																					label="Date Expires"
-																					prepend-icon="mdi-calendar"
-																					readonly
-																					v-bind="attrs"
-																					v-on="on"
-																				></v-text-field>
-																			</template>
-																			<v-date-picker
-																				v-model="newAcc.date_expires"
-																				no-title
-																				scrollable
-																			>
-																				<v-spacer></v-spacer>
-																				<v-btn
-																					text
-																					color="primary"
-																					@click="menu02 = false"
-																				>
-																					Cancel
-																				</v-btn>
-																				<v-btn
-																					text
-																					color="primary"
-																					@click="
-																						$refs.menu.save(newAcc.date_expires)
-																					"
-																				>
-																					OK
-																				</v-btn>
-																			</v-date-picker>
-																		</v-menu> -->
 																	</v-col>
 
 																	<!--  -->

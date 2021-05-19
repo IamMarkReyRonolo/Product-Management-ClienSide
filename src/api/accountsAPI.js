@@ -4,8 +4,8 @@ const url = " http://localhost:3000/api/";
 export default class API {
 	async getSpecificAccount(id, accountId) {
 		const account = await axios.get(url + id + "/accounts/" + accountId);
-		console.log(account);
-		// return products.data.products;
+
+		return account;
 	}
 
 	async addAccount(id, newAccount) {

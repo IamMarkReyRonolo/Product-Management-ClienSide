@@ -112,7 +112,9 @@
 				Loading...
 			</div>
 
-			<div v-if="error" class="error">{{ error }}F</div>
+			<div v-if="error" class="error">
+				{{ this.$router.push("/accessdenied") }}
+			</div>
 
 			<div v-if="fetched">
 				<v-container v-if="customers.length != 0">

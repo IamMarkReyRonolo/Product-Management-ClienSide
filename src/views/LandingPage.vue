@@ -1,5 +1,16 @@
 <template>
 	<div class="landingPage">
+		<div class="text-center mt-4">
+			<v-snackbar v-model="snackbar" :timeout="timeout">
+				<p class="error">{{ text }}</p>
+
+				<template v-slot:action="{ attrs }">
+					<v-btn color="blue" text v-bind="attrs" @click="snackbar = false">
+						Close
+					</v-btn>
+				</template>
+			</v-snackbar>
+		</div>
 		<div class="div">
 			<v-app-bar
 				app
@@ -135,7 +146,8 @@
 							<v-window-item :value="3">
 								<v-card-text>
 									<div class="div" v-if="error">
-										Error, check your internet connection!.
+										<img src="../assets/failed_signUp.svg" alt="" />
+										<p>Email already exists!</p>
 									</div>
 									<div class="div" v-if="loading">
 										<v-progress-circular
@@ -147,10 +159,6 @@
 										<div class="div" v-if="success">
 											<img src="../assets/success_signUp.svg" alt="" />
 											<p>Successfully created account!</p>
-										</div>
-										<div class="div" v-if="!success">
-											<img src="../assets/failed_signUp.svg" alt="" />
-											<p>Email already exists!</p>
 										</div>
 									</div>
 								</v-card-text>
@@ -212,6 +220,9 @@
 				error: false,
 				loading: false,
 				fetched: "",
+				timeout: 2000,
+				snackbar: false,
+				text: "",
 			};
 		},
 		methods: {
@@ -231,6 +242,7 @@
 					return this.result;
 				} catch (error) {
 					this.error = true;
+					this.loading = false;
 				}
 			},
 
@@ -242,8 +254,11 @@
 					console.log("yeah");
 					console.log(users);
 					console.log("yeah");
+					localStorage.setItem("token", users.data.user.token);
+					this.$router.push("/verified");
 				} catch (error) {
-					console.log(error);
+					this.text = "Email or Password is incorrect";
+					this.snackbar = true;
 				}
 			},
 			validate() {

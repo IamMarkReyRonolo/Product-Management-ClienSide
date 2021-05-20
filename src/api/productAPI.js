@@ -1,10 +1,13 @@
 import axios from "axios";
 const url = " http://localhost:3000/api/products/";
+axios.defaults.headers.common["auth-token"] =
+	"Bearer " + localStorage.getItem("token");
 
 export default class API {
 	async getAllProducts() {
 		const products = await axios.get(url);
 
+		console.log(products);
 		// console.log(products.data.products);
 		return products.data.products;
 	}

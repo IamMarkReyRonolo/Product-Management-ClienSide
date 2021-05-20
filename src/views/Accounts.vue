@@ -6,7 +6,7 @@
 			</div>
 
 			<div v-if="error" class="error">
-				{{ error }}
+				{{ this.$router.push("/accessdenied") }}
 			</div>
 
 			<div v-if="fetched">

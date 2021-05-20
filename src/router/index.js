@@ -8,16 +8,20 @@ import SpecificCustomer from "../views/SpecificCustomer.vue";
 import LandingPage from "../views/LandingPage.vue";
 import LoggedIn from "../views/LoggedIn.vue";
 import PageNotFound from "../views/PageNotFound.vue";
+import LogOut from "../views/LogOut.vue";
+import AccessDenied from "../views/AccessDenied.vue";
 Vue.use(VueRouter);
 
 const routes = [
 	{ path: "/", redirect: "/welcome" },
+	{ path: "/logOut", component: LogOut },
 	{ path: "/welcome", name: "LandingPage", component: LandingPage },
 	{
 		path: "/verified",
 		name: "LoggedIn",
 		component: LoggedIn,
 		redirect: "/products",
+
 		children: [
 			{
 				path: "/products",
@@ -47,6 +51,7 @@ const routes = [
 		],
 	},
 	{ path: "*", component: PageNotFound },
+	{ path: "/accessdenied", component: AccessDenied },
 ];
 
 const router = new VueRouter({

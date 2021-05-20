@@ -99,7 +99,7 @@
 			</div>
 
 			<div v-if="error" class="error">
-				{{ error }}
+				{{ this.$router.push("/accessdenied") }}
 			</div>
 
 			<div v-if="fetched" class="">
@@ -375,13 +375,15 @@
 				this.load = true;
 				try {
 					this.products = await productAPI.prototype.getAllProducts();
+					console.log(this.products);
 					this.products = this.products.result;
-					// console.log(this.products);
+					console.log(this.products);
 					this.products.sort((a, b) => a.id - b.id);
 					this.load = false;
 					this.fetched = this.products;
 				} catch (error) {
 					this.error = error;
+					console.log(error.status);
 				}
 			},
 		},

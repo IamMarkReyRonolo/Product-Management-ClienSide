@@ -11,12 +11,12 @@
 				<v-list-item two-line>
 					<v-list-item-avatar>
 						<img
-							src="https://scontent.fceb1-3.fna.fbcdn.net/v/t1.6435-9/169287011_2017074691767068_6531114819268002370_n.jpg?_nc_cat=103&ccb=1-3&_nc_sid=09cbfe&_nc_eui2=AeHkseHYCDPV_2pLz0czzbPPjxutAHy17-KPG60AfLXv4snZ42r6t5qyBFMm7Mcht5z2Hkt_mU8kQJJINcL2jAUM&_nc_ohc=3tP3rvwRY48AX-fqUOp&_nc_ht=scontent.fceb1-3.fna&oh=5872de5c9d9d78f52f2ffa1850088621&oe=60C2C3C3"
+							src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_640.png"
 						/>
 					</v-list-item-avatar>
 
 					<v-list-item-content>
-						<v-list-item-title>Fatima B. Madrigal</v-list-item-title>
+						<v-list-item-title>{{ user.fullname }}</v-list-item-title>
 						<v-list-item-subtitle>Logged In</v-list-item-subtitle>
 					</v-list-item-content>
 				</v-list-item>
@@ -56,20 +56,35 @@
 </template>
 
 <script>
+	import userAPI from "../api/userAPI";
 	export default {
 		name: "App",
 
 		data: () => ({
-			drawer: false,
+			drawer: true,
 			items: [
-				{ text: "My Products", icon: "mdi-widgets", link: "/" },
+				{ text: "My Products", icon: "mdi-widgets", link: "/products" },
 				{
 					text: "My Customers",
 					icon: "mdi-account-group-outline",
 					link: "/customers",
 				},
-				{ text: "Log Out", icon: "mdi-logout" },
+				{ text: "Log Out", icon: "mdi-logout", link: "/logout" },
 			],
+			user: {},
 		}),
+		methods: {},
+
+		async created() {
+			console.log("hey");
+			console.log(localStorage.getItem("token"));
+			const user = await userAPI.prototype.getUser();
+			this.user = user.data;
+			console.log(this.user);
+			console.log("yow");
+		},
+		// mounted() {
+		// 	this.$router.push("/products");
+		// },
 	};
 </script>

@@ -6,7 +6,7 @@
 			</div>
 
 			<div v-if="error" class="error">
-				{{ this.$router.push("/accessdenied") }}
+				{{ redirectError() }}
 			</div>
 
 			<div v-if="fetched">
@@ -91,6 +91,7 @@
 																label="Account Type*"
 																outlined
 																dense
+																required
 																:items="options"
 																v-model="account.type"
 															></v-select>
@@ -365,6 +366,14 @@
 			AccountingView,
 		},
 		methods: {
+			redirectError() {
+				if (this.error.message == "Request failed with status code 404") {
+					console.log("yeah");
+					this.$router.push("/notfound");
+				} else {
+					this.$router.push("/accessdenied");
+				}
+			},
 			editProduct() {
 				this.edit = !this.edit;
 			},
@@ -387,25 +396,57 @@
 					this.load = false;
 				} catch (error) {
 					this.error = error;
+					console.log(this.error.message);
 				}
 			},
 
 			async addAccount() {
-				this.dialog2 = true;
+				try {
+					this.dialog2 = true;
+					console.log("yeah");
 
-				const data = {
-					account_name: this.account.name,
-					account_type: this.account.type,
-					account_username: this.account.username,
-					account_password: this.account.password,
-					original_price: this.account.originalPrice,
-					selling_price: this.account.sellingPrice,
-					date_purchased: new Date(this.account.datePurchased + "Z"),
-					date_expires: new Date(this.account.dateExpires + "Z"),
-				};
+					const oPriceType = typeof this.account.originalPrice;
+					const sPriceType = typeof this.account.sellingPrice;
 
-				this.result = await accountsAPI.prototype.addAccount(this.id, data);
-				this.getProductAccounting(this.id);
+					if (oPriceType + "" == "string" || sPriceType + "" == "string") {
+						new TypeError("Prices must be number");
+
+						this.dialog2 = false;
+						this.snackbar = true;
+						this.text = "Error adding account. Prices must be number";
+						return;
+					}
+
+					console.log("yeah");
+					const data = {
+						account_name: this.account.name,
+						account_type: this.account.type,
+						account_username: this.account.username,
+						account_password: this.account.password,
+						original_price: this.account.originalPrice,
+						selling_price: this.account.sellingPrice,
+						date_purchased: new Date(this.account.datePurchased + "Z"),
+						date_expires: new Date(this.account.dateExpires + "Z"),
+					};
+
+					this.result = await accountsAPI.prototype.addAccount(this.id, data);
+					this.getProductAccounting(this.id);
+
+					this.text = "Successfully added account";
+					this.dialog2 = false;
+					this.dialog = false;
+					this.snackbar = true;
+					this.getProduct(this.id);
+				} catch (error) {
+					this.dialog2 = false;
+					if (error.message == "Network Error") {
+						this.text = error.message;
+					} else {
+						this.text = "Error adding account.";
+					}
+
+					this.snackbar = true;
+				}
 			},
 		},
 
@@ -421,17 +462,6 @@
 
 		watch: {
 			$route: "getProduct",
-			dialog2(val) {
-				if (!val) return;
-
-				setTimeout(() => {
-					this.text = "Successfully added account";
-					this.dialog2 = false;
-					this.dialog = false;
-					this.snackbar = true;
-					this.getProduct(this.id);
-				}, 2000);
-			},
 		},
 	};
 </script>

@@ -72,9 +72,31 @@
 							</v-row>
 							<div class="buttons">
 								<div class="button">
-									<v-btn class="primary" @click="validate">
-										Log in
+									<v-btn
+										:disabled="dialog2"
+										:loading="dialog2"
+										class="primary"
+										@click="validate"
+									>
+										log in
 									</v-btn>
+									<v-dialog
+										v-model="dialog2"
+										hide-overlay
+										persistent
+										width="300"
+									>
+										<v-card color="white" light>
+											<v-card-text>
+												<p mt-5>Logging in. Please wait.</p>
+												<v-progress-linear
+													indeterminate
+													color="black"
+													class="mb-0 mt-5"
+												></v-progress-linear>
+											</v-card-text>
+										</v-card>
+									</v-dialog>
 								</div>
 								<div class="button">
 									<div>
@@ -223,6 +245,7 @@
 				timeout: 2000,
 				snackbar: false,
 				text: "",
+				dialog2: false,
 			};
 		},
 		methods: {
@@ -248,16 +271,24 @@
 
 			async logUser() {
 				try {
+					this.dialog2 = true;
 					console.log("yow");
 					console.log(this.logIn.username);
 					const users = await userAPI.prototype.logIn(this.logIn);
+					this.dialog2 = false;
 					console.log("yeah");
 					console.log(users);
 					console.log("yeah");
 					localStorage.setItem("token", users.data.user.token);
 					this.$router.push("/verified");
 				} catch (error) {
-					this.text = "Email or Password is incorrect";
+					this.dialog2 = false;
+					if (error.message == "Network Error") {
+						this.text = error.message;
+					} else {
+						this.text = "Email or Password is incorrect!";
+					}
+
 					this.snackbar = true;
 				}
 			},
@@ -293,6 +324,11 @@
 				this.logIn.username = "";
 			},
 		},
+		created() {
+			if (localStorage.getItem("token")) {
+				this.$router.push("/verified");
+			}
+		},
 		computed: {
 			currentTitle() {
 				switch (this.step) {
@@ -310,6 +346,8 @@
 				}
 			},
 		},
+
+		watch: {},
 	};
 </script>
 
@@ -319,7 +357,7 @@
 	}
 	.container {
 		width: 90%;
-		margin: 100px auto;
+		margin: 150px auto;
 	}
 
 	.buttons {

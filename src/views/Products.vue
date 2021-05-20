@@ -95,7 +95,21 @@
 
 		<div class="contents">
 			<div v-if="load" class="loading">
-				Loading...
+				<v-sheet
+					:color="`grey ${theme.isDark ? 'darken-2' : 'lighten-4'}`"
+					class="pa-3"
+				>
+					<v-row>
+						<v-col v-for="n in 12" :key="n" cols="3">
+							<v-skeleton-loader
+								class="mx-auto"
+								height="250"
+								width="250"
+								type="card"
+							></v-skeleton-loader>
+						</v-col>
+					</v-row>
+				</v-sheet>
 			</div>
 
 			<div v-if="error" class="error">
@@ -104,8 +118,21 @@
 
 			<div v-if="fetched" class="">
 				<v-container v-if="products.length != 0">
+					<div class="searchCon">
+						<v-text-field
+							label="Search"
+							placeholder="Search"
+							solo
+							dense
+							v-model="search"
+						></v-text-field>
+					</div>
 					<v-row>
-						<v-col v-for="product in products" :key="product.id" cols="3">
+						<v-col
+							v-for="product in filteredProducts"
+							:key="product.id"
+							cols="3"
+						>
 							<v-card class="product" height="250" width="250" dark>
 								<router-link :to="`products/${product.id}/accounts`" exact>
 									<v-img
@@ -142,7 +169,7 @@
 														<v-card dark>
 															<form
 																action=""
-																@submit.prevent=""
+																@submit.prevent="updateProduct(product.id)"
 																enctype="multipart/form-data"
 															>
 																<v-card-title>
@@ -163,6 +190,7 @@
 																					label="Product Image*"
 																					filled
 																					prepend-icon="mdi-camera"
+																					required
 																					@change="imageFile"
 																				></v-file-input>
 																			</v-col>
@@ -186,7 +214,6 @@
 																		class="white--text"
 																		color="white darken-4"
 																		text
-																		@click="updateProduct(product.id)"
 																		type="submit"
 																	>
 																		Save Product
@@ -339,6 +366,7 @@
 			load: false,
 			fetched: null,
 			error: null,
+			search: "",
 		}),
 
 		methods: {
@@ -346,28 +374,75 @@
 				this.edit = !this.edit;
 			},
 			async addProduct() {
-				this.dialog2 = true;
-				const formData = new FormData();
+				try {
+					this.dialog2 = true;
+					const formData = new FormData();
+					formData.append("product_name", this.productName);
+					formData.append("product_image", this.productImage);
+					this.result = await productAPI.prototype.addProduct(formData);
+					this.text = "Successfully added product";
+					this.dialog2 = false;
+					this.dialog = false;
+					this.snackbar = true;
+					this.products.push(this.result);
+				} catch (error) {
+					this.dialog2 = false;
+					if (error.message == "Network Error") {
+						this.text = error.message;
+					} else {
+						this.text = "Error adding product.";
+					}
 
-				formData.append("product_name", this.productName);
-				formData.append("product_image", this.productImage);
-				this.result = await productAPI.prototype.addProduct(formData);
+					this.snackbar = true;
+				}
 			},
 			imageFile(file) {
 				this.productImage = file;
 			},
 			async updateProduct(id) {
-				const formData = new FormData();
+				try {
+					this.dialog3 = true;
+					const formData = new FormData();
+					formData.append("product_name", this.productName);
+					formData.append("product_image", this.productImage);
+					await productAPI.prototype.updateSpecificProduct(id, formData);
+					this.text = "Successfully updated product";
+					this.dialog3 = false;
+					this.dialog = false;
+					this.snackbar = true;
+					this.getProducts();
+				} catch (error) {
+					this.dialog3 = false;
+					this.dialog = false;
+					if (error.message == "Network Error") {
+						this.text = error.message;
+					} else {
+						this.text = "Error updating product.";
+					}
 
-				formData.append("product_name", this.productName);
-				formData.append("product_image", this.productImage);
-				await productAPI.prototype.updateSpecificProduct(id, formData);
-				this.dialog3 = true;
+					this.snackbar = true;
+				}
 			},
 			async deleteProduct(id, dialog) {
-				await productAPI.prototype.deleteSpecificProduct(id);
-				this.dialog5 = true;
-				dialog.value = false;
+				try {
+					this.dialog5 = true;
+					await productAPI.prototype.deleteSpecificProduct(id);
+					dialog.value = false;
+					this.text = "Successfully deleted product";
+					this.dialog5 = false;
+					this.snackbar = true;
+					this.getProducts();
+				} catch (error) {
+					this.dialog5 = false;
+					this.snackbar = true;
+					if (error.message == "Network Error") {
+						this.text = error.message;
+					} else {
+						this.text = "Error deleting product.";
+					}
+
+					this.snackbar = true;
+				}
 			},
 
 			async getProducts() {
@@ -387,6 +462,11 @@
 				}
 			},
 		},
+		inject: {
+			theme: {
+				default: { isDark: false },
+			},
+		},
 
 		async created() {
 			await this.getProducts();
@@ -395,43 +475,53 @@
 			// console.log(this.products);
 		},
 
-		watch: {
-			$route: "getProducts",
-			dialog2(val) {
-				if (!val) return;
-
-				setTimeout(() => {
-					this.text = "Successfully added product";
-					this.dialog2 = false;
-					this.dialog = false;
-					this.snackbar = true;
-					this.products.push(this.result);
-				}, 2000);
-			},
-
-			dialog3(val) {
-				if (!val) return;
-
-				setTimeout(() => {
-					this.text = "Successfully updated product";
-					this.dialog3 = false;
-					this.dialog = false;
-					this.snackbar = true;
-					this.getProducts();
-				}, 2000);
-			},
-
-			dialog5(val) {
-				if (!val) return;
-
-				setTimeout(() => {
-					this.text = "Successfully deleted product";
-					this.dialog5 = false;
-					this.snackbar = true;
-					this.getProducts();
-				}, 2000);
+		computed: {
+			filteredProducts: function() {
+				return this.products.filter((product) => {
+					return product.product_name
+						.toLowerCase()
+						.includes(this.search.toLowerCase());
+				});
 			},
 		},
+
+		// watch: {
+		// 	$route: "getProducts",
+		// 	dialog2(val) {
+		// 		if (!val) return;
+
+		// 		setTimeout(() => {
+		// 			this.text = "Successfully added product";
+		// 			this.dialog2 = false;
+		// 			this.dialog = false;
+		// 			this.snackbar = true;
+		// 			this.products.push(this.result);
+		// 		}, 2000);
+		// 	},
+
+		// 	dialog3(val) {
+		// 		if (!val) return;
+
+		// 		setTimeout(() => {
+		// 			this.text = "Successfully updated product";
+		// 			this.dialog3 = false;
+		// 			this.dialog = false;
+		// 			this.snackbar = true;
+		// 			this.getProducts();
+		// 		}, 2000);
+		// 	},
+
+		// 	dialog5(val) {
+		// 		if (!val) return;
+
+		// 		setTimeout(() => {
+		// 			this.text = "Successfully deleted product";
+		// 			this.dialog5 = false;
+		// 			this.snackbar = true;
+		// 			this.getProducts();
+		// 		}, 2000);
+		// 	},
+		// },
 	};
 </script>
 
@@ -512,5 +602,12 @@
 		font-size: 20px;
 		padding: 20px;
 		margin: 50px 0px;
+	}
+
+	.searchCon {
+		width: 300px;
+		margin: auto;
+		margin-bottom: 40px;
+		text-align: center;
 	}
 </style>

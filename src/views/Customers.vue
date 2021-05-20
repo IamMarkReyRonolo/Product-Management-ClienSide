@@ -109,7 +109,21 @@
 
 		<div class="contents">
 			<div v-if="load" class="loading">
-				Loading...
+				<v-sheet
+					:color="`grey ${theme.isDark ? 'darken-2' : 'lighten-4'}`"
+					class="pa-3"
+				>
+					<v-row>
+						<v-col v-for="n in 12" :key="n" cols="3">
+							<v-skeleton-loader
+								class="mx-auto"
+								height="250"
+								width="250"
+								type="card"
+							></v-skeleton-loader>
+						</v-col>
+					</v-row>
+				</v-sheet>
 			</div>
 
 			<div v-if="error" class="error">
@@ -118,8 +132,21 @@
 
 			<div v-if="fetched">
 				<v-container v-if="customers.length != 0">
+					<div class="searchCon">
+						<v-text-field
+							label="Search"
+							placeholder="Search"
+							solo
+							dense
+							v-model="search"
+						></v-text-field>
+					</div>
 					<v-row>
-						<v-col v-for="customer in customers" :key="customer.id" cols="3">
+						<v-col
+							v-for="customer in filteredCustomers"
+							:key="customer.id"
+							cols="3"
+						>
 							<v-card class="mx-auto" max-width="344" outlined dark>
 								<v-list-item three-line>
 									<v-list-item-content>
@@ -175,7 +202,7 @@
 													<v-card dark>
 														<form
 															action=""
-															@submit.prevent=""
+															@submit.prevent="updateCustomer(customer.id)"
 															enctype="multipart/form-data"
 														>
 															<v-card-title>
@@ -234,7 +261,6 @@
 																	class="white--text"
 																	color="white darken-4"
 																	text
-																	@click="updateCustomer(customer.id)"
 																	type="submit"
 																>
 																	Save Customer
@@ -384,11 +410,28 @@
 				customer_phone: "",
 				customer_email: "",
 			},
+			search: "",
 		}),
 		methods: {
 			async addCustomer() {
-				this.dialog2 = true;
-				this.result = await customerAPI.prototype.addCustomer(this.customer);
+				try {
+					this.dialog2 = true;
+					this.result = await customerAPI.prototype.addCustomer(this.customer);
+					this.text = "Successfully added customer";
+					this.dialog2 = false;
+					this.dialog = false;
+					this.snackbar = true;
+					this.getCustomers();
+				} catch (error) {
+					this.dialog2 = false;
+					if (error.message == "Network Error") {
+						this.text = error.message;
+					} else {
+						this.text = "Error adding customer.";
+					}
+
+					this.snackbar = true;
+				}
 			},
 			async getCustomers() {
 				this.error = this.fetched = null;
@@ -411,19 +454,54 @@
 
 				// formData.append("product_name", this.productName);
 				// formData.append("product_image", this.productImage);
-				console.log("------------------");
-				console.log(this.newCustomer);
-				console.log("------------------");
-				await customerAPI.prototype.updateSpecificCustomer(
-					id,
-					this.newCustomer
-				);
-				this.dialog3 = true;
+				try {
+					this.dialog3 = true;
+					console.log("------------------");
+					console.log(this.newCustomer);
+					console.log("------------------");
+					await customerAPI.prototype.updateSpecificCustomer(
+						id,
+						this.newCustomer
+					);
+					this.text = "Successfully updated customer";
+					this.dialog3 = false;
+					this.dialog = false;
+					this.snackbar = true;
+					this.getCustomers();
+				} catch (error) {
+					this.dialog3 = false;
+					if (error.message == "Network Error") {
+						this.text = error.message;
+					} else {
+						this.text = "Error updating customer.";
+					}
+
+					this.snackbar = true;
+				}
 			},
 			async deleteCustomer(id, dialog) {
-				await customerAPI.prototype.deleteSpecificCustomer(id);
-				this.dialog5 = true;
-				dialog.value = false;
+				try {
+					this.dialog5 = true;
+					await customerAPI.prototype.deleteSpecificCustomer(id);
+					dialog.value = false;
+					this.text = "Successfully deleted customer";
+					this.dialog5 = false;
+					this.snackbar = true;
+					this.getCustomers();
+				} catch (error) {
+					this.dialog5 = false;
+					if (error.message == "Network Error") {
+						this.text = error.message;
+					} else {
+						this.text = "Error deleting customer.";
+					}
+					this.snackbar = true;
+				}
+			},
+		},
+		inject: {
+			theme: {
+				default: { isDark: false },
 			},
 		},
 		async created() {
@@ -432,40 +510,14 @@
 			// this.products = this.products.result;
 			// console.log(this.products);
 		},
-		watch: {
-			dialog2(val) {
-				if (!val) return;
 
-				setTimeout(() => {
-					this.text = "Successfully added customer";
-					this.dialog2 = false;
-					this.dialog = false;
-					this.snackbar = true;
-					this.getCustomers();
-					// this.customers.push(this.result);
-				}, 2000);
-			},
-			dialog3(val) {
-				if (!val) return;
-
-				setTimeout(() => {
-					this.text = "Successfully updated customer";
-					this.dialog3 = false;
-					this.dialog = false;
-					this.snackbar = true;
-					this.getCustomers();
-				}, 2000);
-			},
-
-			dialog5(val) {
-				if (!val) return;
-
-				setTimeout(() => {
-					this.text = "Successfully deleted customer";
-					this.dialog5 = false;
-					this.snackbar = true;
-					this.getCustomers();
-				}, 2000);
+		computed: {
+			filteredCustomers: function() {
+				return this.customers.filter((customer) => {
+					let name =
+						customer.customer_firstname + " " + customer.customer_lastname;
+					return name.toLowerCase().includes(this.search.toLowerCase());
+				});
 			},
 		},
 	};
@@ -517,5 +569,12 @@
 	.emptyContainer h2 {
 		padding: 20px;
 		font-size: 20px;
+	}
+
+	.searchCon {
+		width: 300px;
+		margin: auto;
+		margin-bottom: 40px;
+		text-align: center;
 	}
 </style>

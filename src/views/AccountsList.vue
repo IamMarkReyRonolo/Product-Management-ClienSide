@@ -12,8 +12,17 @@
 					</template>
 				</v-snackbar>
 			</div>
+			<div class="searchCon">
+				<v-text-field
+					label="Search"
+					placeholder="Search"
+					solo
+					dense
+					v-model="search"
+				></v-text-field>
+			</div>
 			<v-row>
-				<v-col v-for="account in prod.accounts" :key="account.id" cols="3">
+				<v-col v-for="account in filteredAccounts" :key="account.id" cols="3">
 					<v-card height="250" width="250" dark class="acc">
 						<router-link
 							style="text-decoration: none; color: inherit;"
@@ -27,7 +36,15 @@
 							>
 								<div class="content">
 									<h1>{{ account.account_name }}</h1>
-									<p>
+									<p
+										:class="
+											Date.now() > new Date(account.date_expires)
+												? 'expired'
+												: checkDate(account)
+												? 'warning'
+												: 'normal'
+										"
+									>
 										Expires: {{ account.date_expires.toString().substr(0, 10) }}
 									</p>
 								</div>
@@ -83,6 +100,7 @@
 																			outlined
 																			dense
 																			:items="options"
+																			required
 																			v-model="newAcc.type"
 																		></v-select>
 																	</v-col>
@@ -134,6 +152,7 @@
 																			type="date"
 																			name=""
 																			id=""
+																			required
 																			v-model="newAcc.date_purchased"
 																			class="dateInput"
 																		/>
@@ -149,6 +168,7 @@
 																			id=""
 																			v-model="newAcc.date_expires"
 																			class="dateInput"
+																			required
 																		/>
 																	</v-col>
 
@@ -326,66 +346,100 @@
 				options: ["Solo", "Shared"],
 				menu01: false,
 				menu02: false,
+				search: "",
 			};
 		},
 		methods: {
+			checkDate(account) {
+				return (new Date(account.date_expires) - Date.now()) / 86400000 <= 2;
+			},
 			editProduct() {
 				this.edit = !this.edit;
 			},
 
 			async deleteAccount(accountId, dialog) {
-				const productId = this.id;
-				await accountsAPI.prototype.deleteSpecificAccount(productId, accountId);
-				this.dialog5 = true;
-				dialog.value = false;
+				try {
+					this.dialog5 = true;
+					dialog.value = false;
+					const productId = this.id;
+					await accountsAPI.prototype.deleteSpecificAccount(
+						productId,
+						accountId
+					);
+					this.text = "Successfully deleted account";
+					this.dialog5 = false;
+					this.snackbar = true;
+					this.$emit("getProduct");
+				} catch (error) {
+					this.dialog5 = false;
+					if (error.message == "Network Error") {
+						this.text = error.message;
+					} else {
+						this.text = "Error deleting customer.";
+					}
+
+					this.snackbar = true;
+				}
 			},
 			async updateAccount(accountId) {
-				const productId = this.id;
-				const data = {
-					account_name: this.newAcc.name,
-					account_type: this.newAcc.type,
-					account_username: this.newAcc.username,
-					account_password: this.newAcc.password,
-					original_price: this.newAcc.originalPrice,
-					selling_price: this.newAcc.sellingPrice,
-					date_purchased: new Date(this.newAcc.date_purchased + "Z"),
-					date_expires: new Date(this.newAcc.date_expires + "Z"),
-				};
+				try {
+					const oPriceType = typeof this.newAcc.originalPrice;
+					const sPriceType = typeof this.newAcc.sellingPrice;
+					if (oPriceType + "" == "string" || sPriceType + "" == "string") {
+						new TypeError("Prices must be number");
 
-				await accountsAPI.prototype.updateSpecificAccount(
-					productId,
-					accountId,
-					data
-				);
-				this.dialog3 = true;
+						this.dialog2 = false;
+						this.snackbar = true;
+						this.text = "Error adding account. Prices must be number";
+						return;
+					}
+					this.dialog3 = true;
+					const productId = this.id;
+					const data = {
+						account_name: this.newAcc.name,
+						account_type: this.newAcc.type,
+						account_username: this.newAcc.username,
+						account_password: this.newAcc.password,
+						original_price: this.newAcc.originalPrice,
+						selling_price: this.newAcc.sellingPrice,
+						date_purchased: new Date(this.newAcc.date_purchased + "Z"),
+						date_expires: new Date(this.newAcc.date_expires + "Z"),
+					};
+
+					await accountsAPI.prototype.updateSpecificAccount(
+						productId,
+						accountId,
+						data
+					);
+
+					this.text = "Successfully updated account";
+					this.dialog3 = false;
+					this.dialog = false;
+					this.snackbar = true;
+					this.$emit("getProduct");
+				} catch (error) {
+					this.dialog3 = false;
+					if (error.message == "Network Error") {
+						this.text = error.message;
+					} else {
+						this.text = "Error deleting customer.";
+					}
+
+					this.snackbar = true;
+				}
 			},
 		},
 
 		// mounted() {
 		// 	this.getProduct(this.id);
 		// },
-
-		watch: {
-			dialog3(val) {
-				if (!val) return;
-
-				setTimeout(() => {
-					this.text = "Successfully updated account";
-					this.dialog3 = false;
-					this.dialog = false;
-					this.snackbar = true;
-					this.$emit("getProduct");
-				}, 2000);
-			},
-			dialog5(val) {
-				if (!val) return;
-
-				setTimeout(() => {
-					this.text = "Successfully deleted account";
-					this.dialog5 = false;
-					this.snackbar = true;
-					this.$emit("getProduct");
-				}, 2000);
+		computed: {
+			filteredAccounts: function() {
+				return this.prod.accounts.filter((account) => {
+					return account.account_name
+						.toLowerCase()
+						.includes(this.search.toLowerCase());
+				});
 			},
 		},
 	};
@@ -526,7 +580,7 @@
 		margin-top: 60px;
 	}
 
-	.content p {
+	.content .normal {
 		background-color: rgb(206, 206, 206);
 		border-radius: 20px;
 		color: #1e1e1e;
@@ -572,5 +626,29 @@
 	::-webkit-calendar-picker-indicator {
 		background-color: white;
 		cursor: pointer;
+	}
+
+	.searchCon {
+		width: 300px;
+		margin: 0px auto;
+		margin-top: -40px;
+		margin-bottom: 10px;
+		text-align: center;
+	}
+
+	.expired {
+		background-color: rgb(224, 64, 64);
+		border-radius: 20px;
+		color: #e1e1e1;
+		padding: 5px 10px;
+		font-weight: bolder;
+	}
+
+	.warning {
+		background-color: rgb(255, 236, 61);
+		border-radius: 20px;
+		color: #1e1e1e;
+		padding: 5px 10px;
+		font-weight: bolder;
 	}
 </style>

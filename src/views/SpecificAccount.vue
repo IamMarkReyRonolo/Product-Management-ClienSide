@@ -12,10 +12,13 @@
 			</v-snackbar>
 		</div>
 
-		<h1 class="display-2 font-weight-bold">{{ account.account_name }}</h1>
-
 		<div v-if="load" class="loading">
-			Loading...
+			<v-progress-circular
+				:size="70"
+				:width="7"
+				color="blue"
+				indeterminate
+			></v-progress-circular>
 		</div>
 
 		<div v-if="error" class="error">
@@ -23,6 +26,7 @@
 		</div>
 
 		<div v-if="fetched" class="">
+			<h1 class="display-2 font-weight-bold">{{ account.account_name }}</h1>
 			<div class="container1">
 				<div class="inner">
 					<div class="div">

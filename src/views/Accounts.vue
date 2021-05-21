@@ -123,6 +123,7 @@
 																required
 																dense
 																outlined
+																type="number"
 															></v-text-field>
 														</v-col>
 
@@ -133,6 +134,7 @@
 																required
 																dense
 																outlined
+																type="number"
 															></v-text-field>
 														</v-col>
 
@@ -403,21 +405,7 @@
 			async addAccount() {
 				try {
 					this.dialog2 = true;
-					console.log("yeah");
 
-					const oPriceType = typeof this.account.originalPrice;
-					const sPriceType = typeof this.account.sellingPrice;
-
-					if (oPriceType + "" == "string" || sPriceType + "" == "string") {
-						new TypeError("Prices must be number");
-
-						this.dialog2 = false;
-						this.snackbar = true;
-						this.text = "Error adding account. Prices must be number";
-						return;
-					}
-
-					console.log("yeah");
 					const data = {
 						account_name: this.account.name,
 						account_type: this.account.type,

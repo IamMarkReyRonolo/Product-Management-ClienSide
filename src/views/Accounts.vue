@@ -300,6 +300,7 @@
 										<AccountsList
 											:product="product"
 											:edit="edit"
+											:userId="userId"
 											v-on:getProduct="getProduct(id)"
 										></AccountsList>
 									</v-tab-item>
@@ -329,6 +330,7 @@
 	import accountingAPI from "../api/accountingAPI";
 	export default {
 		name: "Accounts",
+		props: { userId: Number },
 		data() {
 			return {
 				count: 0,
@@ -388,8 +390,15 @@
 				this.error = this.fetched = null;
 				this.load = true;
 				try {
-					this.product = await productAPI.prototype.getSpecificProduct(id);
-					this.product = this.product.data;
+					this.product = await productAPI.prototype.getSpecificProduct(
+						this.userId,
+						id
+					);
+					console.log("-----");
+					console.log(this.product.data[0]);
+					console.log("-----");
+
+					this.product = this.product.data[0];
 
 					this.product.accounts.sort((a, b) => a.id - b.id);
 					this.getProductAccounting(id);

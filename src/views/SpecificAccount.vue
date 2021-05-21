@@ -99,7 +99,16 @@
 						v-for="customer in account.customers"
 						:key="customer.id"
 					>
-						<div class="profiles">
+						<div
+							class="profiles"
+							:class="
+								Date.now() > new Date(customer.profile.subscription_expires)
+									? 'error'
+									: checkDate(customer)
+									? 'warning'
+									: ''
+							"
+						>
 							<h3>
 								{{ customer.customer_firstname }}
 								{{ customer.customer_lastname }}
@@ -586,7 +595,8 @@
 	import customerAPI from "../api/customerAPI";
 	export default {
 		name: "SpecificAccount",
-		props: ["ssdd"],
+
+		props: { userId: Number },
 		data: () => {
 			return {
 				account: {},
@@ -623,6 +633,13 @@
 			};
 		},
 		methods: {
+			checkDate(customer) {
+				return (
+					(new Date(customer.profile.subscription_expires) - Date.now()) /
+						86400000 <=
+					2
+				);
+			},
 			redirectError() {
 				if (this.error.message == "Request failed with status code 404") {
 					console.log("yeah");
@@ -640,6 +657,7 @@
 					this.dialog2 = true;
 					if (this.addExisting) {
 						const result = await profileAPI.prototype.addExistingCustomer(
+							this.userId,
 							this.account.id,
 							this.selectedCustomerId,
 							this.profile
@@ -662,6 +680,7 @@
 							subscription_expires: this.profile.subscription_expires,
 						};
 						const result = await profileAPI.prototype.addNewCustomer(
+							this.userId,
 							this.account.id,
 							data
 						);
@@ -693,11 +712,16 @@
 				try {
 					const accountId = this.$route.params.accountId;
 					const productId = this.$route.params.id;
+					console.log("yowwwwwwwwwwwwwwwwwwwwwwwww");
 					const acc = await accountsAPI.prototype.getSpecificAccount(
+						this.userId,
 						productId,
 						accountId
 					);
-					this.customers = await customerAPI.prototype.getAllCustomers();
+					console.log("yowwwwwwwwwwwwwwwwwwwwwwwww");
+					this.customers = await customerAPI.prototype.getAllCustomers(
+						this.userId
+					);
 					this.customers.sort((a, b) => a.id - b.id);
 
 					this.account = acc.data.account;

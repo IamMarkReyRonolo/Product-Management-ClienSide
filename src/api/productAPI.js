@@ -1,32 +1,39 @@
 import axios from "axios";
-const url = " http://localhost:3000/api/products/";
+const url = " http://localhost:3000/api/";
 axios.defaults.headers.common["auth-token"] =
 	"Bearer " + localStorage.getItem("token");
 
 export default class API {
-	async getAllProducts() {
-		const products = await axios.get(url);
+	async getAllProducts(userId) {
+		const link = url + `${userId}/products`;
+		const products = await axios.get(link);
 
+		console.log("object");
 		console.log(products);
+		console.log("wasapp");
 		// console.log(products.data.products);
 		return products.data.products;
 	}
 
-	async addProduct(newProduct) {
-		const product = await axios.post(url, newProduct);
+	async addProduct(userId, newProduct) {
+		const link = url + `${userId}/products`;
+		const product = await axios.post(link, newProduct);
 		return product.data.result.product;
 	}
 
-	async getSpecificProduct(id) {
-		const products = await axios.get(url + id);
+	async getSpecificProduct(userId, id) {
+		const link = url + ` ${userId}/products/${id}`;
+		const products = await axios.get(link);
 		return products;
 	}
-	async updateSpecificProduct(id, updates) {
-		const products = await axios.patch(url + id, updates);
+	async updateSpecificProduct(userId, id, updates) {
+		const link = url + ` ${userId}/products/${id}`;
+		const products = await axios.patch(link, updates);
 		return products;
 	}
-	async deleteSpecificProduct(id) {
-		const products = await axios.delete(url + id);
+	async deleteSpecificProduct(userId, id) {
+		const link = url + ` ${userId}/products/${id}`;
+		const products = await axios.delete(link);
 		return products;
 	}
 }

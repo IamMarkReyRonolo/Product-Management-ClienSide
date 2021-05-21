@@ -178,7 +178,7 @@
 										></v-progress-circular>
 									</div>
 									<div v-if="fetched">
-										<div class="div" v-if="success">
+										<div class="div">
 											<img src="../assets/success_signUp.svg" alt="" />
 											<p>Successfully created account!</p>
 										</div>
@@ -239,9 +239,9 @@
 				passwordRules: [(v) => !!v || "Password is required"],
 				valid1: true,
 				success: false,
-				error: false,
+				error: null,
 				loading: false,
-				fetched: "",
+				fetched: null,
 				timeout: 2000,
 				snackbar: false,
 				text: "",
@@ -252,16 +252,15 @@
 			async signUp() {
 				try {
 					this.loading = true;
+					this.error = false;
+					this.fetched = false;
 					this.result = await userAPI.prototype.signUp(this.user);
-					if (this.result.data.success_message) {
-						this.success = true;
-						console.log(this.success);
-					} else {
-						this.success = false;
-						console.log(this.success);
-					}
+
 					this.loading = false;
+					console.log("yoww");
 					this.fetched = this.result;
+					console.log(this.fetched);
+					console.log("yowww");
 					return this.result;
 				} catch (error) {
 					this.error = true;

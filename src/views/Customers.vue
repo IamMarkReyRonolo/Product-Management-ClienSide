@@ -148,7 +148,13 @@
 							:key="customer.id"
 							cols="3"
 						>
-							<v-card class="mx-auto" max-width="344" outlined dark>
+							<v-card
+								class="mx-auto"
+								max-width="344"
+								outlined
+								dark
+								:class="checkDate(customer.profiles)"
+							>
 								<v-list-item three-line>
 									<v-list-item-content>
 										<div class="overline mb-4">
@@ -177,6 +183,7 @@
 										text
 										light
 										class="white mb-2 ml-2"
+										:userId="userId"
 										:to="`/customers/${customer.id}`"
 									>
 										View Customer
@@ -385,6 +392,7 @@
 
 	export default {
 		name: "Customers",
+		props: { userId: Number },
 		data: () => ({
 			load: false,
 			fetched: null,
@@ -415,10 +423,38 @@
 			search: "",
 		}),
 		methods: {
+			checkDate(profiles) {
+				let er = false;
+				let warn = false;
+
+				profiles.forEach((profile) => {
+					if (Date.now() > new Date(profile.subscription_expires)) {
+						er = true;
+					}
+				});
+
+				profiles.forEach((profile) => {
+					if (
+						(new Date(profile.subscription_expires) - Date.now()) / 86400000 <=
+						2
+					) {
+						warn = true;
+					}
+				});
+
+				if (er) {
+					return "error";
+				} else if (warn) {
+					return "warning";
+				}
+			},
 			async addCustomer() {
 				try {
 					this.dialog2 = true;
-					this.result = await customerAPI.prototype.addCustomer(this.customer);
+					this.result = await customerAPI.prototype.addCustomer(
+						this.userId,
+						this.customer
+					);
 					this.text = "Successfully added customer";
 					this.dialog2 = false;
 					this.dialog = false;
@@ -439,9 +475,15 @@
 				this.error = this.fetched = null;
 				this.load = true;
 				try {
-					this.customers = await customerAPI.prototype.getAllCustomers();
+					console.log("yeah");
+					console.log("wowowow");
+					console.log(this.userId);
+					this.customers = await customerAPI.prototype.getAllCustomers(
+						this.userId
+					);
 					this.customers.sort((a, b) => a.id - b.id);
 					console.log(this.customers);
+					console.log("wewe");
 					this.load = false;
 					this.fetched = this.customers;
 				} catch (error) {
@@ -462,6 +504,7 @@
 					console.log(this.newCustomer);
 					console.log("------------------");
 					await customerAPI.prototype.updateSpecificCustomer(
+						this.userId,
 						id,
 						this.newCustomer
 					);
@@ -484,7 +527,7 @@
 			async deleteCustomer(id, dialog) {
 				try {
 					this.dialog5 = true;
-					await customerAPI.prototype.deleteSpecificCustomer(id);
+					await customerAPI.prototype.deleteSpecificCustomer(this.userId, id);
 					dialog.value = false;
 					this.text = "Successfully deleted customer";
 					this.dialog5 = false;
@@ -511,6 +554,7 @@
 			// this.products = await productAPI.prototype.getAllProducts();
 			// this.products = this.products.result;
 			// console.log(this.products);
+			console.log(this.userId);
 		},
 
 		computed: {

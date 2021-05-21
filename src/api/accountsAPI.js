@@ -2,8 +2,10 @@ import axios from "axios";
 const url = " http://localhost:3000/api/";
 
 export default class API {
-	async getSpecificAccount(id, accountId) {
-		const account = await axios.get(url + id + "/accounts/" + accountId);
+	async getSpecificAccount(userId, id, accountId) {
+		const account = await axios.get(
+			url + userId + "/" + id + "/accounts/" + accountId
+		);
 
 		return account;
 	}

@@ -64,7 +64,7 @@
 			</v-app-bar>
 
 			<v-main color="grey">
-				<router-view />
+				<router-view :userId="user.id" />
 			</v-main>
 		</div>
 	</v-app>
@@ -119,6 +119,7 @@
 			console.log(this.user);
 			console.log("yow");
 			console.log("yowww");
+			console.log("eyyyy");
 		},
 		// mounted() {
 		// 	this.$router.push("/products");

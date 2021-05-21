@@ -134,7 +134,11 @@
 							cols="3"
 						>
 							<v-card class="product" height="250" width="250" dark>
-								<router-link :to="`products/${product.id}/accounts`" exact>
+								<router-link
+									:to="`products/${product.id}/accounts`"
+									:userId="userId"
+									exact
+								>
 									<v-img
 										class="white--text align-end"
 										height="200px"
@@ -345,6 +349,7 @@
 	import productAPI from "../api/productAPI";
 	export default {
 		name: "Home",
+		props: { userId: Number },
 		data: () => ({
 			dialog: false,
 			dialog2: false,
@@ -379,7 +384,10 @@
 					const formData = new FormData();
 					formData.append("product_name", this.productName);
 					formData.append("product_image", this.productImage);
-					this.result = await productAPI.prototype.addProduct(formData);
+					this.result = await productAPI.prototype.addProduct(
+						this.userId,
+						formData
+					);
 					this.text = "Successfully added product";
 					this.dialog2 = false;
 					this.dialog = false;
@@ -405,7 +413,11 @@
 					const formData = new FormData();
 					formData.append("product_name", this.productName);
 					formData.append("product_image", this.productImage);
-					await productAPI.prototype.updateSpecificProduct(id, formData);
+					await productAPI.prototype.updateSpecificProduct(
+						this.userId,
+						id,
+						formData
+					);
 					this.text = "Successfully updated product";
 					this.dialog3 = false;
 					this.dialog = false;
@@ -426,7 +438,7 @@
 			async deleteProduct(id, dialog) {
 				try {
 					this.dialog5 = true;
-					await productAPI.prototype.deleteSpecificProduct(id);
+					await productAPI.prototype.deleteSpecificProduct(this.userId, id);
 					dialog.value = false;
 					this.text = "Successfully deleted product";
 					this.dialog5 = false;
@@ -449,9 +461,10 @@
 				this.error = this.fetched = null;
 				this.load = true;
 				try {
-					this.products = await productAPI.prototype.getAllProducts();
+					this.products = await productAPI.prototype.getAllProducts(
+						this.userId
+					);
 					console.log(this.products);
-					this.products = this.products.result;
 					console.log(this.products);
 					this.products.sort((a, b) => a.id - b.id);
 					this.load = false;
@@ -469,6 +482,9 @@
 		},
 
 		async created() {
+			console.log("-----");
+			console.log(this.userId);
+			console.log("-----");
 			await this.getProducts();
 			// this.products = await productAPI.prototype.getAllProducts();
 			// this.products = this.products.result;

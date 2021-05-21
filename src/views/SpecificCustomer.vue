@@ -106,13 +106,20 @@
 					</div>
 
 					<div
-						class="division"
 						v-for="account in customer.accounts"
 						:key="account.id"
 						v-show="customer.accounts.length != 0"
+						class="division"
 					>
 						<v-card
 							class="content"
+							:class="
+								Date.now() > new Date(account.profile.subscription_expires)
+									? 'error'
+									: checkDate(account)
+									? 'warning'
+									: ''
+							"
 							:to="`/products/${account.productId}/accounts/${account.id}`"
 						>
 							<h3 class="con">
@@ -372,6 +379,7 @@
 	import customerAPI from "../api/customerAPI";
 	export default {
 		name: "SpecificAccount",
+		props: { userId: Number },
 		data: () => {
 			return {
 				customer: {},
@@ -401,6 +409,13 @@
 			};
 		},
 		methods: {
+			checkDate(account) {
+				return (
+					(new Date(account.profile.subscription_expires) - Date.now()) /
+						86400000 <=
+					2
+				);
+			},
 			redirectError() {
 				if (this.error.message == "Request failed with status code 404") {
 					console.log("yeah");
@@ -419,6 +434,7 @@
 				try {
 					const customerId = this.$route.params.id;
 					this.customer = await customerAPI.prototype.getSpecificCustomer(
+						this.userId,
 						customerId
 					);
 
@@ -426,6 +442,7 @@
 
 					console.log("----------");
 					console.log(this.customer);
+					console.log(this.customer.accounts);
 					console.log("----------");
 
 					console.log("999999");
@@ -569,6 +586,20 @@
 	}
 
 	.division {
+		display: flex;
+		cursor: pointer;
+		margin: 2px 0px;
+		padding: 0px;
+	}
+
+	.expired {
+		display: flex;
+		cursor: pointer;
+		margin: 2px 0px;
+		padding: 0px;
+	}
+
+	.warning {
 		display: flex;
 		cursor: pointer;
 		margin: 2px 0px;

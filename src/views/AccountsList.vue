@@ -26,6 +26,7 @@
 					<v-card height="250" width="250" dark class="acc">
 						<router-link
 							style="text-decoration: none; color: inherit;"
+							:userId="userId"
 							:to="`accounts/${account.id}`"
 							exact
 						>
@@ -322,6 +323,7 @@
 		props: {
 			product: Object,
 			edit: Boolean,
+			userId: Number,
 		},
 		data() {
 			return {

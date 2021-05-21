@@ -56,6 +56,7 @@
 										<v-text-field
 											label="Phone*"
 											required
+											type="number"
 											v-model="customer.customer_phone"
 										></v-text-field>
 									</v-col>
@@ -231,6 +232,7 @@
 																			<v-text-field
 																				label="Phone*"
 																				required
+																				type="number"
 																				v-model="newCustomer.customer_phone"
 																			></v-text-field>
 																		</v-col>

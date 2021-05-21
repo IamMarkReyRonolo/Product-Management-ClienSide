@@ -22,7 +22,7 @@
 		</div>
 
 		<div v-if="error" class="error">
-			{{ this.$router.push("/accessdenied") }}
+			{{ redirectError() }}
 		</div>
 
 		<div v-if="fetched" class="specificCustomer">
@@ -401,6 +401,14 @@
 			};
 		},
 		methods: {
+			redirectError() {
+				if (this.error.message == "Request failed with status code 404") {
+					console.log("yeah");
+					this.$router.push("/notfound");
+				} else {
+					this.$router.push("/accessdenied");
+				}
+			},
 			editProfile() {
 				this.edit = !this.edit;
 			},
@@ -430,50 +438,59 @@
 			},
 
 			async updateProfile(id) {
-				id;
-				console.log("yeah");
-				console.log(this.profile);
-				console.log("yeah");
-				const profile = await profileAPI.prototype.updateSpecificProduct(
-					id,
-					this.profile
-				);
-				this.dialog3 = true;
-				console.log(profile);
-			},
-			async deleteProfile(id, dialog) {
-				const profile = await profileAPI.prototype.deleteSpecificProduct(id);
-				this.dialog5 = true;
-				dialog.value = false;
-				console.log(profile);
-			},
-		},
-		created() {
-			this.getCustomer();
-		},
-		watch: {
-			dialog3(val) {
-				if (!val) return;
+				try {
+					this.dialog3 = true;
+					id;
+					console.log("yeah");
+					console.log(this.profile);
+					console.log("yeah");
+					const profile = await profileAPI.prototype.updateSpecificProduct(
+						id,
+						this.profile
+					);
 
-				setTimeout(() => {
+					console.log(profile);
 					this.text = "Successfully updated profile";
 					this.dialog3 = false;
 					this.dialog = false;
 					this.snackbar = true;
 					this.getCustomer();
-				}, 2000);
+				} catch (error) {
+					this.dialog3 = false;
+					if (error.message == "Network Error") {
+						this.text = error.message;
+					} else {
+						this.text = "Error updating profile.";
+					}
+
+					this.snackbar = true;
+				}
 			},
+			async deleteProfile(id, dialog) {
+				try {
+					this.dialog5 = true;
+					dialog.value = false;
+					const profile = await profileAPI.prototype.deleteSpecificProduct(id);
 
-			dialog5(val) {
-				if (!val) return;
-
-				setTimeout(() => {
+					console.log(profile);
 					this.text = "Successfully deleted profile";
 					this.dialog5 = false;
 					this.snackbar = true;
 					this.getCustomer();
-				}, 2000);
+				} catch (error) {
+					this.dialog5 = false;
+					if (error.message == "Network Error") {
+						this.text = error.message;
+					} else {
+						this.text = "Error updating profile.";
+					}
+
+					this.snackbar = true;
+				}
 			},
+		},
+		created() {
+			this.getCustomer();
 		},
 	};
 </script>

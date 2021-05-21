@@ -22,7 +22,7 @@
 		</div>
 
 		<div v-if="error" class="error">
-			{{ this.$router.push("/accessdenied") }}
+			{{ redirectError() }}
 		</div>
 
 		<div v-if="fetched" class="">
@@ -151,6 +151,7 @@
 																		label="Profile Pin*"
 																		v-model="profile.profile_pin"
 																		required
+																		type="number"
 																		dense
 																		outlined
 																	></v-text-field>
@@ -161,6 +162,7 @@
 																		label="Profile Status*"
 																		outlined
 																		dense
+																		required
 																		:items="options"
 																		v-model="profile.subscription_status"
 																	></v-select>
@@ -172,6 +174,7 @@
 																		v-model="profile.subscription_price"
 																		required
 																		dense
+																		type="number"
 																		outlined
 																	></v-text-field>
 																</v-col>
@@ -186,6 +189,7 @@
 																		id=""
 																		v-model="profile.subscription_purchased"
 																		class="dateInput"
+																		required
 																	/>
 																</v-col>
 
@@ -199,6 +203,7 @@
 																		id=""
 																		v-model="profile.subscription_expires"
 																		class="dateInput"
+																		required
 																	/>
 																</v-col>
 
@@ -358,10 +363,13 @@
 
 											<v-divider></v-divider>
 										</v-stepper-header>
-
-										<v-stepper-items>
-											<v-stepper-content step="1">
-												<form action="" enctype="multipart/form-data">
+										<form
+											action=""
+											enctype="multipart/form-data"
+											@submit.prevent="addProfile"
+										>
+											<v-stepper-items>
+												<v-stepper-content step="1">
 													<v-card-title>
 														<span class="headline">Create Profile</span>
 													</v-card-title>
@@ -375,6 +383,7 @@
 																		required
 																		dense
 																		outlined
+																		type="number"
 																	></v-text-field>
 																</v-col>
 
@@ -385,6 +394,7 @@
 																		dense
 																		:items="options"
 																		v-model="profile.subscription_status"
+																		required
 																	></v-select>
 																</v-col>
 
@@ -395,6 +405,7 @@
 																		required
 																		dense
 																		outlined
+																		type="number"
 																	></v-text-field>
 																</v-col>
 
@@ -407,6 +418,7 @@
 																		name=""
 																		v-model="profile.subscription_purchased"
 																		class="dateInput"
+																		required
 																	/>
 																</v-col>
 
@@ -419,6 +431,7 @@
 																		name=""
 																		v-model="profile.subscription_expires"
 																		class="dateInput"
+																		required
 																	/>
 																</v-col>
 
@@ -427,131 +440,132 @@
 														</v-container>
 														<small>*indicates required field</small>
 													</v-card-text>
-												</form>
 
-												<v-btn color="primary" light @click="e1 = 2">
-													Continue
-												</v-btn>
-
-												<v-btn text @click="dialog = false">
-													Cancel
-												</v-btn>
-											</v-stepper-content>
-
-											<v-stepper-content step="2">
-												<v-card-title>
-													<span class="headline">Add Customer</span>
-													<v-spacer></v-spacer>
-													<v-btn
-														color="primary"
-														@click="addExisting = !addExisting"
-													>
-														<p v-if="!addExisting" class="buttonlabel">
-															Add Existing
-														</p>
-														<p v-else class="buttonlabel">Add New</p>
+													<v-btn color="primary" light @click="e1 = 2">
+														Continue
 													</v-btn>
-												</v-card-title>
-												<v-card-text v-if="addExisting == false">
-													<v-container>
-														<v-row>
-															<v-col cols="12">
-																<v-text-field
-																	label="First Name*"
-																	required
-																	v-model="customer.customer_firstname"
-																></v-text-field>
-															</v-col>
 
-															<v-col cols="12">
-																<v-text-field
-																	label="Last Name*"
-																	required
-																	v-model="customer.customer_lastname"
-																></v-text-field>
-															</v-col>
+													<v-btn text @click="dialog = false">
+														Cancel
+													</v-btn>
+												</v-stepper-content>
 
-															<v-col cols="12">
-																<v-text-field
-																	label="Phone*"
-																	required
-																	v-model="customer.customer_phone"
-																></v-text-field>
-															</v-col>
-															<v-col cols="12">
-																<v-text-field
-																	label="Email*"
-																	required
-																	v-model="customer.customer_email"
-																></v-text-field>
-															</v-col>
-														</v-row>
-													</v-container>
-													<small>*indicates required field</small>
-												</v-card-text>
-
-												<v-card-text v-if="addExisting == true">
-													<v-container>
-														<v-row>
-															<v-col cols="12">
-																<h2>Select Customer*</h2>
-																<v-radio-group
-																	class="ml-10"
-																	v-model="selectedCustomerId"
-																>
-																	<v-radio
-																		v-for="cus in customers"
-																		:key="cus.id"
-																		:label="
-																			cus.customer_firstname +
-																				' ' +
-																				cus.customer_lastname
-																		"
-																		:value="cus.id"
-																	>
-																	</v-radio>
-																</v-radio-group>
-															</v-col>
-														</v-row>
-													</v-container>
-													<small>*indicates required field</small>
-												</v-card-text>
-
-												<v-btn
-													:disabled="dialog3"
-													:loading="dialog3"
-													color="primary"
-													light
-													type="submit"
-													@click="addProfile()"
-												>
-													Add Profile
-												</v-btn>
-												<v-dialog
-													v-model="dialog3"
-													hide-overlay
-													persistent
-													width="300"
-												>
-													<v-card color="white" light>
-														<v-card-text>
-															<p mt-5>
-																Adding profile. Please wait.
+												<v-stepper-content step="2">
+													<v-card-title>
+														<span class="headline">Add Customer</span>
+														<v-spacer></v-spacer>
+														<v-btn
+															color="primary"
+															@click="addExisting = !addExisting"
+														>
+															<p v-if="!addExisting" class="buttonlabel">
+																Add Existing
 															</p>
-															<v-progress-linear
-																indeterminate
-																color="black"
-																class="mb-0 mt-5"
-															></v-progress-linear>
-														</v-card-text>
-													</v-card>
-												</v-dialog>
+															<p v-else class="buttonlabel">Add New</p>
+														</v-btn>
+													</v-card-title>
+													<v-card-text v-if="addExisting == false">
+														<v-container>
+															<v-row>
+																<v-col cols="12">
+																	<v-text-field
+																		label="First Name*"
+																		required
+																		v-model="customer.customer_firstname"
+																	></v-text-field>
+																</v-col>
 
-												<v-btn text @click="e1 = 1">
-													Back
-												</v-btn>
-											</v-stepper-content>
-										</v-stepper-items>
+																<v-col cols="12">
+																	<v-text-field
+																		label="Last Name*"
+																		required
+																		v-model="customer.customer_lastname"
+																	></v-text-field>
+																</v-col>
+
+																<v-col cols="12">
+																	<v-text-field
+																		label="Phone*"
+																		required
+																		type="number"
+																		v-model="customer.customer_phone"
+																	></v-text-field>
+																</v-col>
+																<v-col cols="12">
+																	<v-text-field
+																		label="Email*"
+																		required
+																		v-model="customer.customer_email"
+																	></v-text-field>
+																</v-col>
+															</v-row>
+														</v-container>
+														<small>*indicates required field</small>
+													</v-card-text>
+
+													<v-card-text v-if="addExisting == true">
+														<v-container>
+															<v-row>
+																<v-col cols="12">
+																	<h2>Select Customer*</h2>
+																	<v-radio-group
+																		class="ml-10"
+																		v-model="selectedCustomerId"
+																		required
+																	>
+																		<v-radio
+																			v-for="cus in customers"
+																			:key="cus.id"
+																			:label="
+																				cus.customer_firstname +
+																					' ' +
+																					cus.customer_lastname
+																			"
+																			:value="cus.id"
+																		>
+																		</v-radio>
+																	</v-radio-group>
+																</v-col>
+															</v-row>
+														</v-container>
+														<small>*indicates required field</small>
+													</v-card-text>
+
+													<v-btn
+														:disabled="dialog2"
+														:loading="dialog2"
+														color="primary"
+														light
+														type="submit"
+													>
+														Add Profile
+													</v-btn>
+													<v-dialog
+														v-model="dialog2"
+														hide-overlay
+														persistent
+														width="300"
+													>
+														<v-card color="white" light>
+															<v-card-text>
+																<p mt-5>
+																	Adding profile. Please wait.
+																</p>
+																<v-progress-linear
+																	indeterminate
+																	color="black"
+																	class="mb-0 mt-5"
+																></v-progress-linear>
+															</v-card-text>
+														</v-card>
+													</v-dialog>
+
+													<v-btn text @click="e1 = 1">
+														Back
+													</v-btn>
+												</v-stepper-content>
+											</v-stepper-items>
+										</form>
 									</v-stepper>
 								</v-card>
 							</v-dialog>
@@ -609,44 +623,68 @@
 			};
 		},
 		methods: {
+			redirectError() {
+				if (this.error.message == "Request failed with status code 404") {
+					console.log("yeah");
+					this.$router.push("/notfound");
+				} else {
+					this.$router.push("/accessdenied");
+				}
+			},
 			editProfile() {
 				this.edit = !this.edit;
 			},
 
 			async addProfile() {
-				if (this.addExisting) {
-					const result = await profileAPI.prototype.addExistingCustomer(
-						this.account.id,
-						this.selectedCustomerId,
-						this.profile
-					);
-					console.log("existing");
-					console.log(this.profile);
-					console.log(this.selectedCustomerId);
-					console.log(result);
-				} else {
-					console.log("Nooo");
-					const data = {
-						customer_firstname: this.customer.customer_firstname,
-						customer_lastname: this.customer.customer_lastname,
-						customer_phone: this.customer.customer_phone,
-						customer_email: this.customer.customer_email,
-						profile_pin: this.profile.profile_pin,
-						subscription_status: this.profile.subscription_status,
-						subscription_price: this.profile.subscription_price,
-						subscription_purchased: this.profile.subscription_purchased,
-						subscription_expires: this.profile.subscription_expires,
-					};
-					const result = await profileAPI.prototype.addNewCustomer(
-						this.account.id,
-						data
-					);
+				try {
+					this.dialog2 = true;
+					if (this.addExisting) {
+						const result = await profileAPI.prototype.addExistingCustomer(
+							this.account.id,
+							this.selectedCustomerId,
+							this.profile
+						);
+						console.log("existing");
+						console.log(this.profile);
+						console.log(this.selectedCustomerId);
+						console.log(result);
+					} else {
+						console.log("Nooo");
+						const data = {
+							customer_firstname: this.customer.customer_firstname,
+							customer_lastname: this.customer.customer_lastname,
+							customer_phone: this.customer.customer_phone,
+							customer_email: this.customer.customer_email,
+							profile_pin: this.profile.profile_pin,
+							subscription_status: this.profile.subscription_status,
+							subscription_price: this.profile.subscription_price,
+							subscription_purchased: this.profile.subscription_purchased,
+							subscription_expires: this.profile.subscription_expires,
+						};
+						const result = await profileAPI.prototype.addNewCustomer(
+							this.account.id,
+							data
+						);
 
-					console.log(data);
-					console.log(result);
+						console.log(data);
+						console.log(result);
+					}
+
+					this.text = "Successfully added profile";
+					this.dialog2 = false;
+					this.dialog = false;
+					this.snackbar = true;
+					this.getAccount();
+				} catch (error) {
+					this.dialog2 = false;
+					if (error.message == "Network Error") {
+						this.text = error.message;
+					} else {
+						this.text = "Error adding profile.";
+					}
+
+					this.snackbar = true;
 				}
-
-				this.dialog3 = true;
 			},
 
 			async getAccount() {
@@ -676,62 +714,58 @@
 			},
 
 			async updateProfile(id) {
-				console.log("yeah");
-				console.log(this.profile);
-				console.log("yeah");
-				const profile = await profileAPI.prototype.updateSpecificProduct(
-					id,
-					this.profile
-				);
-				this.dialog3 = true;
-				console.log(profile);
-			},
-			async deleteProfile(id, dialog) {
-				const profile = await profileAPI.prototype.deleteSpecificProduct(id);
-				this.dialog5 = true;
-				dialog.value = false;
-				console.log(profile);
-			},
-		},
-		created() {
-			this.getAccount();
-		},
-		watch: {
-			$route: "getAccount",
-			dialog2(val) {
-				if (!val) return;
+				try {
+					this.dialog3 = true;
+					console.log("yeah");
+					console.log(this.profile);
+					console.log("yeah");
+					const profile = await profileAPI.prototype.updateSpecificProduct(
+						id,
+						this.profile
+					);
 
-				setTimeout(() => {
-					this.text = "Successfully added profile";
-					this.dialog2 = false;
-					this.dialog = false;
-					this.snackbar = true;
-					this.getAccount();
-				}, 2000);
-			},
-
-			dialog3(val) {
-				if (!val) return;
-
-				setTimeout(() => {
+					console.log(profile);
 					this.text = "Successfully updated profile";
 					this.dialog3 = false;
 					this.dialog = false;
 					this.snackbar = true;
 					this.getAccount();
-				}, 2000);
+				} catch (error) {
+					this.dialog3 = false;
+					if (error.message == "Network Error") {
+						this.text = error.message;
+					} else {
+						this.text = "Error updating profile.";
+					}
+
+					this.snackbar = true;
+				}
 			},
+			async deleteProfile(id, dialog) {
+				try {
+					this.dialog5 = true;
+					dialog.value = false;
+					const profile = await profileAPI.prototype.deleteSpecificProduct(id);
 
-			dialog5(val) {
-				if (!val) return;
-
-				setTimeout(() => {
+					console.log(profile);
 					this.text = "Successfully deleted profile";
 					this.dialog5 = false;
 					this.snackbar = true;
 					this.getAccount();
-				}, 2000);
+				} catch (error) {
+					this.dialog5 = false;
+					if (error.message == "Network Error") {
+						this.text = error.message;
+					} else {
+						this.text = "Error deleting profile.";
+					}
+
+					this.snackbar = true;
+				}
 			},
+		},
+		created() {
+			this.getAccount();
 		},
 	};
 </script>

@@ -22,11 +22,13 @@
 					Product Management System
 				</h1>
 				<v-spacer></v-spacer>
-				<p class="ic">
-					<v-icon dark>
-						mdi-help
-					</v-icon>
-				</p>
+				<router-link :to="'/about'"
+					><p class="ic">
+						<v-icon dark>
+							mdi-help
+						</v-icon>
+					</p></router-link
+				>
 			</v-app-bar>
 		</div>
 
@@ -402,5 +404,9 @@
 
 	.div img {
 		width: 200px;
+	}
+
+	a {
+		text-decoration: none;
 	}
 </style>

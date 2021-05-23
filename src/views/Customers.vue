@@ -133,6 +133,22 @@
 
 			<div v-if="fetched">
 				<v-container v-if="customers.length != 0">
+					<div class="legend">
+						<div class="legendCon">
+							<div class="con">
+								<div class="normal"></div>
+								<p>Good</p>
+							</div>
+							<div class="con">
+								<div class="warning"></div>
+								<p>Less than 2 days to expire</p>
+							</div>
+							<div class="con">
+								<div class="error"></div>
+								<p>Expired</p>
+							</div>
+						</div>
+					</div>
 					<div class="searchCon">
 						<v-text-field
 							label="Search"
@@ -622,5 +638,46 @@
 		margin: auto;
 		margin-bottom: 40px;
 		text-align: center;
+	}
+
+	.legend {
+		display: flex;
+		justify-content: flex-end;
+		align-items: center;
+		width: 500px;
+		margin-left: auto;
+		margin-top: -20px;
+	}
+
+	.legend .normal,
+	.legend .warning,
+	.legend .error {
+		width: 8px;
+		height: 8px;
+		padding: 8px;
+		border-radius: 100%;
+		border: 1px solid grey;
+		margin: 5px;
+		cursor: pointer;
+	}
+
+	.legendCon {
+		display: flex;
+	}
+
+	.legend .normal {
+		background-color: #e1e1e1;
+		border: 1px solid grey;
+	}
+
+	.con {
+		display: flex;
+		justify-content: flex-start;
+		align-items: center;
+	}
+
+	.con p {
+		margin: 5px;
+		font-size: 12px;
 	}
 </style>

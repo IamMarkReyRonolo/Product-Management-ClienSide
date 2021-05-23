@@ -12,6 +12,23 @@
 					</template>
 				</v-snackbar>
 			</div>
+
+			<div class="legend">
+				<div class="legendCon">
+					<div class="con">
+						<div class="normal"></div>
+						<p>Good</p>
+					</div>
+					<div class="con">
+						<div class="warning"></div>
+						<p>Less than 2 days to expire</p>
+					</div>
+					<div class="con">
+						<div class="error"></div>
+						<p>Expired</p>
+					</div>
+				</div>
+			</div>
 			<div class="searchCon">
 				<v-text-field
 					label="Search"
@@ -129,17 +146,6 @@
 																		<v-text-field
 																			label="Original Price*"
 																			v-model="newAcc.originalPrice"
-																			required
-																			dense
-																			outlined
-																			type="number"
-																		></v-text-field>
-																	</v-col>
-
-																	<v-col cols="12">
-																		<v-text-field
-																			label="Selling Price*"
-																			v-model="newAcc.sellingPrice"
 																			required
 																			dense
 																			outlined
@@ -343,7 +349,7 @@
 					username: "",
 					password: "",
 					originalPrice: 0,
-					sellingPrice: 0,
+
 					date_purchased: new Date().toISOString().substr(0, 10),
 					date_expires: new Date().toISOString().substr(0, 10),
 				},
@@ -395,7 +401,6 @@
 						account_username: this.newAcc.username,
 						account_password: this.newAcc.password,
 						original_price: this.newAcc.originalPrice,
-						selling_price: this.newAcc.sellingPrice,
 						date_purchased: new Date(this.newAcc.date_purchased + "Z"),
 						date_expires: new Date(this.newAcc.date_expires + "Z"),
 					};
@@ -644,5 +649,46 @@
 		color: #1e1e1e;
 		padding: 5px 10px;
 		font-weight: bolder;
+	}
+
+	.legend {
+		display: flex;
+		justify-content: flex-end;
+		align-items: center;
+		width: 500px;
+		margin-left: auto;
+		margin-top: -20px;
+	}
+
+	.legend .normal,
+	.legend .warning,
+	.legend .error {
+		width: 8px;
+		height: 8px;
+		padding: 8px;
+		border-radius: 100%;
+		border: 1px solid grey;
+		margin: 5px;
+		cursor: pointer;
+	}
+
+	.legendCon {
+		display: flex;
+	}
+
+	.legend .normal {
+		background-color: #e1e1e1;
+		border: 1px solid grey;
+	}
+
+	.con {
+		display: flex;
+		justify-content: flex-start;
+		align-items: center;
+	}
+
+	.con p {
+		margin: 5px;
+		font-size: 12px;
 	}
 </style>

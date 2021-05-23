@@ -127,17 +127,6 @@
 															></v-text-field>
 														</v-col>
 
-														<v-col cols="12">
-															<v-text-field
-																label="Selling Price*"
-																v-model="account.sellingPrice"
-																required
-																dense
-																outlined
-																type="number"
-															></v-text-field>
-														</v-col>
-
 														<!--  -->
 
 														<v-col cols="12">
@@ -351,7 +340,7 @@
 					username: "",
 					password: "",
 					originalPrice: 0,
-					sellingPrice: 0,
+
 					datePurchased: new Date().toISOString().substr(0, 10),
 					dateExpires: new Date().toISOString().substr(0, 10),
 				},
@@ -421,7 +410,6 @@
 						account_username: this.account.username,
 						account_password: this.account.password,
 						original_price: this.account.originalPrice,
-						selling_price: this.account.sellingPrice,
 						date_purchased: new Date(this.account.datePurchased + "Z"),
 						date_expires: new Date(this.account.dateExpires + "Z"),
 					};

@@ -164,7 +164,9 @@
 											<v-card dark>
 												<form
 													action=""
-													@submit.prevent="updateProfile(customer.id)"
+													@submit.prevent="
+														updateProfile(account.id, customer.id)
+													"
 													enctype="multipart/form-data"
 												>
 													<v-card-title>
@@ -324,7 +326,9 @@
 														color="red darken-1"
 														text
 														type="submit"
-														@click="deleteProfile(customer.id, dialog)"
+														@click="
+															deleteProfile(account.id, customer.id, dialog)
+														"
 													>
 														Delete
 													</v-btn>
@@ -454,14 +458,15 @@
 				}
 			},
 
-			async updateProfile(id) {
+			async updateProfile(accountId, id) {
 				try {
 					this.dialog3 = true;
 					id;
 					console.log("yeah");
 					console.log(this.profile);
 					console.log("yeah");
-					const profile = await profileAPI.prototype.updateSpecificProduct(
+					const profile = await profileAPI.prototype.updateSpecificProfile(
+						accountId,
 						id,
 						this.profile
 					);
@@ -483,11 +488,14 @@
 					this.snackbar = true;
 				}
 			},
-			async deleteProfile(id, dialog) {
+			async deleteProfile(accountId, id, dialog) {
 				try {
 					this.dialog5 = true;
 					dialog.value = false;
-					const profile = await profileAPI.prototype.deleteSpecificProduct(id);
+					const profile = await profileAPI.prototype.deleteSpecificProfile(
+						accountId,
+						id
+					);
 
 					console.log(profile);
 					this.text = "Successfully deleted profile";

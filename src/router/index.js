@@ -10,12 +10,18 @@ import LoggedIn from "../views/LoggedIn.vue";
 import PageNotFound from "../views/PageNotFound.vue";
 import LogOut from "../views/LogOut.vue";
 import AccessDenied from "../views/AccessDenied.vue";
+import InfoPage from "../views/InfoPage.vue";
 Vue.use(VueRouter);
 
 const routes = [
 	{ path: "/", redirect: "/welcome" },
 	{ path: "/logOut", component: LogOut },
 	{ path: "/welcome", name: "LandingPage", component: LandingPage },
+	{
+		path: "/about",
+		name: "InfoPage",
+		component: InfoPage,
+	},
 	{
 		path: "/verified",
 		name: "LoggedIn",

@@ -1,15 +1,27 @@
 import axios from "axios";
-const url = " http://localhost:3000/api/customers/";
+
 axios.defaults.headers.common["auth-token"] =
 	"Bearer " + localStorage.getItem("token");
 
 export default class API {
-	async updateSpecificProduct(id, updates) {
-		const products = await axios.patch(url + id + "/profile", updates);
+	async updateSpecificProfile(accountId, id, updates) {
+		const api =
+			"http://localhost:3000/api/" +
+			accountId +
+			"/customers/" +
+			id +
+			"/profile";
+		const products = await axios.patch(api, updates);
 		return products;
 	}
-	async deleteSpecificProduct(id) {
-		const products = await axios.delete(url + id + "/profile");
+	async deleteSpecificProfile(accountId, id) {
+		const api =
+			"http://localhost:3000/api/" +
+			accountId +
+			"/customers/" +
+			id +
+			"/profile";
+		const products = await axios.delete(api);
 		return products;
 	}
 

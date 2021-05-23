@@ -491,15 +491,10 @@
 				this.error = this.fetched = null;
 				this.load = true;
 				try {
-					console.log("yeah");
-					console.log("wowowow");
-					console.log(this.userId);
 					this.customers = await customerAPI.prototype.getAllCustomers(
 						this.userId
 					);
 					this.customers.sort((a, b) => a.id - b.id);
-					console.log(this.customers);
-					console.log("wewe");
 					this.load = false;
 					this.fetched = this.customers;
 				} catch (error) {
@@ -516,9 +511,7 @@
 				// formData.append("product_image", this.productImage);
 				try {
 					this.dialog3 = true;
-					console.log("------------------");
-					console.log(this.newCustomer);
-					console.log("------------------");
+
 					await customerAPI.prototype.updateSpecificCustomer(
 						this.userId,
 						id,
@@ -567,10 +560,6 @@
 		},
 		async created() {
 			await this.getCustomers();
-			// this.products = await productAPI.prototype.getAllProducts();
-			// this.products = this.products.result;
-			// console.log(this.products);
-			console.log(this.userId);
 		},
 
 		computed: {

@@ -50,7 +50,10 @@
 							<v-img
 								class="white--text align-end"
 								height="180px"
-								:src="'http://localhost:3000/' + prod.product_image"
+								:src="
+									'https://product-management-server.herokuapp.com/' +
+										prod.product_image.split('/')[4]
+								"
 							>
 								<div class="content">
 									<h1>{{ account.account_name }}</h1>

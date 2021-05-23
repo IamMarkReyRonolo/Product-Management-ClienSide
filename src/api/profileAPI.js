@@ -6,7 +6,7 @@ axios.defaults.headers.common["auth-token"] =
 export default class API {
 	async updateSpecificProfile(accountId, id, updates) {
 		const api =
-			"http://localhost:3000/api/" +
+			"https://product-management-server.herokuapp.com/api/" +
 			accountId +
 			"/customers/" +
 			id +
@@ -16,7 +16,7 @@ export default class API {
 	}
 	async deleteSpecificProfile(accountId, id) {
 		const api =
-			"http://localhost:3000/api/" +
+			"https://product-management-server.herokuapp.com/api/" +
 			accountId +
 			"/customers/" +
 			id +
@@ -27,14 +27,18 @@ export default class API {
 
 	async addNewCustomer(userId, id, data) {
 		const url =
-			"http://localhost:3000/api/" + userId + "/" + id + "/customers/create";
+			"https://product-management-server.herokuapp.com/api/" +
+			userId +
+			"/" +
+			id +
+			"/customers/create";
 		const account = await axios.post(url, data);
 		return account;
 	}
 
 	async addExistingCustomer(userId, accountId, customerId, data) {
 		const url =
-			"http://localhost:3000/api/" +
+			"https://product-management-server.herokuapp.com/api/" +
 			userId +
 			"/" +
 			accountId +

@@ -36,7 +36,10 @@
 										<v-img
 											class="white--text align-end"
 											height="200px"
-											:src="'http://localhost:3000/' + product.product_image"
+											:src="
+												'https://product-management-server.herokuapp.com/' +
+													product.product_image.split('/')[4]
+											"
 										>
 										</v-img>
 									</v-card>
@@ -361,7 +364,6 @@
 		methods: {
 			redirectError() {
 				if (this.error.message == "Request failed with status code 404") {
-					console.log("yeah");
 					this.$router.push("/notfound");
 				} else {
 					this.$router.push("/accessdenied");
@@ -383,20 +385,16 @@
 						this.userId,
 						id
 					);
-					console.log("-----");
-					console.log(this.product.data[0]);
-					console.log("-----");
 
 					this.product = this.product.data[0];
 
 					this.product.accounts.sort((a, b) => a.id - b.id);
 					this.getProductAccounting(id);
-					// console.log(this.product);
+
 					this.fetched = this.product;
 					this.load = false;
 				} catch (error) {
 					this.error = error;
-					console.log(this.error.message);
 				}
 			},
 

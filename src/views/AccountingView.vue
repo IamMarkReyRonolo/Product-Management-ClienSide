@@ -66,7 +66,7 @@
 		},
 
 		mounted() {
-			console.log("yeah");
+			console.log("Mark Rey Ronolo");
 		},
 	};
 </script>

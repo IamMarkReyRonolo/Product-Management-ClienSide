@@ -112,14 +112,8 @@
 		},
 
 		async created() {
-			console.log("wasappppp");
-			console.log("hey");
-			console.log(localStorage.getItem("token"));
+			console.log("This system is not perfect.");
 			await this.getUser();
-			console.log(this.user);
-			console.log("yow");
-			console.log("yowww");
-			console.log("eyyyy");
 		},
 		// mounted() {
 		// 	this.$router.push("/products");

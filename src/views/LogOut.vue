@@ -30,7 +30,6 @@
 		},
 
 		async created() {
-			console.log("yeah");
 			await this.logOut();
 		},
 	};

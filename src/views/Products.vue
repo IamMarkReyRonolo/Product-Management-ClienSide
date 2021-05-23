@@ -142,7 +142,10 @@
 									<v-img
 										class="white--text align-end"
 										height="200px"
-										:src="'http://localhost:3000/' + product.product_image"
+										:src="
+											'https://product-management-server.herokuapp.com/' +
+												product.product_image.split('/')[4]
+										"
 									>
 									</v-img>
 								</router-link>
@@ -464,14 +467,12 @@
 					this.products = await productAPI.prototype.getAllProducts(
 						this.userId
 					);
-					console.log(this.products);
-					console.log(this.products);
+
 					this.products.sort((a, b) => a.id - b.id);
 					this.load = false;
 					this.fetched = this.products;
 				} catch (error) {
 					this.error = error;
-					console.log(error.status);
 				}
 			},
 		},
@@ -482,13 +483,7 @@
 		},
 
 		async created() {
-			console.log("-----");
-			console.log(this.userId);
-			console.log("-----");
 			await this.getProducts();
-			// this.products = await productAPI.prototype.getAllProducts();
-			// this.products = this.products.result;
-			// console.log(this.products);
 		},
 
 		computed: {

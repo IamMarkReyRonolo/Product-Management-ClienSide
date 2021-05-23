@@ -422,7 +422,6 @@
 			},
 			redirectError() {
 				if (this.error.message == "Request failed with status code 404") {
-					console.log("yeah");
 					this.$router.push("/notfound");
 				} else {
 					this.$router.push("/accessdenied");
@@ -444,13 +443,6 @@
 
 					this.customer = this.customer.data;
 
-					console.log("----------");
-					console.log(this.customer);
-					console.log(this.customer.accounts);
-					console.log("----------");
-
-					console.log("999999");
-
 					this.load = false;
 					this.fetched = this.customer;
 				} catch (error) {
@@ -462,16 +454,13 @@
 				try {
 					this.dialog3 = true;
 					id;
-					console.log("yeah");
-					console.log(this.profile);
-					console.log("yeah");
-					const profile = await profileAPI.prototype.updateSpecificProfile(
+
+					await profileAPI.prototype.updateSpecificProfile(
 						accountId,
 						id,
 						this.profile
 					);
 
-					console.log(profile);
 					this.text = "Successfully updated profile";
 					this.dialog3 = false;
 					this.dialog = false;
@@ -492,12 +481,8 @@
 				try {
 					this.dialog5 = true;
 					dialog.value = false;
-					const profile = await profileAPI.prototype.deleteSpecificProfile(
-						accountId,
-						id
-					);
+					await profileAPI.prototype.deleteSpecificProfile(accountId, id);
 
-					console.log(profile);
 					this.text = "Successfully deleted profile";
 					this.dialog5 = false;
 					this.snackbar = true;

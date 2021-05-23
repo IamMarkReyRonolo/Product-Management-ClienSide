@@ -646,7 +646,6 @@
 			},
 			redirectError() {
 				if (this.error.message == "Request failed with status code 404") {
-					console.log("yeah");
 					this.$router.push("/notfound");
 				} else {
 					this.$router.push("/accessdenied");
@@ -660,18 +659,13 @@
 				try {
 					this.dialog2 = true;
 					if (this.addExisting) {
-						const result = await profileAPI.prototype.addExistingCustomer(
+						await profileAPI.prototype.addExistingCustomer(
 							this.userId,
 							this.account.id,
 							this.selectedCustomerId,
 							this.profile
 						);
-						console.log("existing");
-						console.log(this.profile);
-						console.log(this.selectedCustomerId);
-						console.log(result);
 					} else {
-						console.log("Nooo");
 						const data = {
 							customer_firstname: this.customer.customer_firstname,
 							customer_lastname: this.customer.customer_lastname,
@@ -683,14 +677,11 @@
 							subscription_purchased: this.profile.subscription_purchased,
 							subscription_expires: this.profile.subscription_expires,
 						};
-						const result = await profileAPI.prototype.addNewCustomer(
+						await profileAPI.prototype.addNewCustomer(
 							this.userId,
 							this.account.id,
 							data
 						);
-
-						console.log(data);
-						console.log(result);
 					}
 
 					this.text = "Successfully added profile";
@@ -716,24 +707,20 @@
 				try {
 					const accountId = this.$route.params.accountId;
 					const productId = this.$route.params.id;
-					console.log("yowwwwwwwwwwwwwwwwwwwwwwwww");
+
 					const acc = await accountsAPI.prototype.getSpecificAccount(
 						this.userId,
 						productId,
 						accountId
 					);
-					console.log("yowwwwwwwwwwwwwwwwwwwwwwwww");
+
 					this.customers = await customerAPI.prototype.getAllCustomers(
 						this.userId
 					);
 					this.customers.sort((a, b) => a.id - b.id);
 
 					this.account = acc.data.account;
-					console.log(this.account.account);
-					console.log("yeah");
-					console.log(this.customers);
-					console.log("yes");
-					// console.log(this.products);
+
 					this.load = false;
 					this.fetched = this.account;
 				} catch (error) {
@@ -744,16 +731,13 @@
 			async updateProfile(accountId, id) {
 				try {
 					this.dialog3 = true;
-					console.log("yeah");
-					console.log(this.profile);
-					console.log("yeah");
-					const profile = await profileAPI.prototype.updateSpecificProfile(
+
+					await profileAPI.prototype.updateSpecificProfile(
 						accountId,
 						id,
 						this.profile
 					);
 
-					console.log(profile);
 					this.text = "Successfully updated profile";
 					this.dialog3 = false;
 					this.dialog = false;
@@ -774,12 +758,8 @@
 				try {
 					this.dialog5 = true;
 					dialog.value = false;
-					const profile = await profileAPI.prototype.deleteSpecificProfile(
-						accountId,
-						id
-					);
+					await profileAPI.prototype.deleteSpecificProfile(accountId, id);
 
-					console.log(profile);
 					this.text = "Successfully deleted profile";
 					this.dialog5 = false;
 					this.snackbar = true;

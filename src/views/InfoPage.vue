@@ -93,12 +93,8 @@
 				<div class="erd">
 					<h2>Entity Relationship Diagram</h2>
 					<br />
-					<iframe
-						width="900"
-						height="600"
-						src="https://dbdiagram.io/embed/60a89f77b29a09603d1606a8"
-					>
-					</iframe>
+					<img src="../assets/Untitled.png" />
+
 					<br />
 					<br />
 					<h2>Business Rules</h2>
@@ -253,5 +249,9 @@
 		width: 40px;
 		color: #e1e1e1;
 		cursor: pointer;
+	}
+
+	.erd img {
+		width: 1200px;
 	}
 </style>

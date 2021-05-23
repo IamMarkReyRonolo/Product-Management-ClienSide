@@ -259,10 +259,9 @@
 					this.result = await userAPI.prototype.signUp(this.user);
 
 					this.loading = false;
-					console.log("yoww");
+
 					this.fetched = this.result;
-					console.log(this.fetched);
-					console.log("yowww");
+
 					return this.result;
 				} catch (error) {
 					this.error = true;
@@ -273,13 +272,10 @@
 			async logUser() {
 				try {
 					this.dialog2 = true;
-					console.log("yow");
-					console.log(this.logIn.username);
+
 					const users = await userAPI.prototype.logIn(this.logIn);
 					this.dialog2 = false;
-					console.log("yeah");
-					console.log(users);
-					console.log("yeah");
+
 					localStorage.setItem("token", users.data.user.token);
 					this.$router.push("/verified");
 				} catch (error) {
@@ -295,14 +291,12 @@
 			},
 			validate() {
 				if (this.$refs.form.validate()) {
-					console.log(this.logIn);
 					this.logUser();
 				}
 			},
 			validate1() {
 				if (this.$refs.form1.validate()) {
 					this.step++;
-					console.log(this.step);
 				}
 			},
 			reset() {

@@ -578,6 +578,39 @@
 		},
 		async created() {
 			await this.getCustomers();
+			this.customers = this.customers.sort((customer1, customer2) => {
+				let min1 = new Date(
+					customer1.profiles[0].subscription_expires
+				).getTime();
+
+				for (let i = 1; i < customer1.profiles.length; i++) {
+					if (
+						min1 >
+						new Date(customer1.profiles[0].subscription_expires).getTime()
+					) {
+						min1 = new Date(
+							customer1.profiles[0].subscription_expires
+						).getTime();
+					}
+				}
+
+				let min2 = new Date(
+					customer2.profiles[0].subscription_expires
+				).getTime();
+
+				for (let i = 1; i < customer2.profiles.length; i++) {
+					if (
+						min2 >
+						new Date(customer2.profiles[i].subscription_expires).getTime()
+					) {
+						min2 = new Date(
+							customer2.profiles[i].subscription_expires
+						).getTime();
+					}
+				}
+
+				return min1 < min2 ? -1 : 1;
+			});
 		},
 
 		computed: {

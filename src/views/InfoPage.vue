@@ -174,7 +174,7 @@
 	}
 
 	.mainContainer {
-		width: 80%;
+		width: 100%;
 		margin: 120px auto;
 
 		text-align: center;
@@ -214,7 +214,7 @@
 	}
 
 	.businessrulesCon {
-		width: 900px;
+		width: 700px;
 		display: flex;
 		justify-content: center;
 		align-items: center;
@@ -223,7 +223,7 @@
 	}
 
 	.busRules {
-		width: 400px;
+		width: 300px;
 		padding: 10px;
 		border-radius: 20px;
 		margin: 10px auto;
@@ -252,6 +252,7 @@
 	}
 
 	.erd img {
-		width: 1200px;
+		width: 1000px;
+		margin: auto;
 	}
 </style>

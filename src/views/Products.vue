@@ -168,6 +168,7 @@
 															dark
 															v-bind="attrs"
 															v-on="on"
+															@click="setDefaultValues(product)"
 															><v-icon>mdi-pencil</v-icon></v-btn
 														>
 													</template>
@@ -380,6 +381,10 @@
 		methods: {
 			editProduct() {
 				this.edit = !this.edit;
+			},
+
+			setDefaultValues(product) {
+				this.productName = product.product_name;
 			},
 			async addProduct() {
 				try {

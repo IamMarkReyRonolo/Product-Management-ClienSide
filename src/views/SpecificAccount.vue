@@ -138,6 +138,7 @@
 												dark
 												v-bind="attrs"
 												v-on="on"
+												@click="setDefaultValues(customer.profile)"
 												><v-icon>mdi-pencil</v-icon></v-btn
 											>
 										</template>
@@ -637,6 +638,17 @@
 			};
 		},
 		methods: {
+			setDefaultValues(profile) {
+				this.profile.profile_pin = profile.profile_pin;
+				this.profile.subscription_status = profile.subscription_status;
+				this.profile.subscription_price = profile.subscription_price;
+				this.profile.subscription_purchased = profile.subscription_purchased
+					.toString()
+					.substr(0, 10);
+				this.profile.subscription_expires = profile.subscription_expires
+					.toString()
+					.substr(0, 10);
+			},
 			checkDate(customer) {
 				return (
 					(new Date(customer.profile.subscription_expires) - Date.now()) /

@@ -218,6 +218,7 @@
 														dark
 														v-bind="attrs"
 														v-on="on"
+														@click="setDefaultValues(customer)"
 														><v-icon>mdi-pencil</v-icon></v-btn
 													>
 												</template>
@@ -439,6 +440,9 @@
 			search: "",
 		}),
 		methods: {
+			setDefaultValues(customer) {
+				this.newCustomer = customer;
+			},
 			checkDate(profiles) {
 				let er = false;
 				let warn = false;

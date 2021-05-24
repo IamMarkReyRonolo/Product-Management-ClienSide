@@ -88,6 +88,7 @@
 													dark
 													v-bind="attrs"
 													v-on="on"
+													@click="setDefaultValues(account)"
 													><v-icon>mdi-pencil</v-icon></v-btn
 												>
 											</template>
@@ -363,6 +364,19 @@
 			};
 		},
 		methods: {
+			setDefaultValues(account) {
+				this.newAcc.name = account.account_name;
+				this.newAcc.type = account.account_type;
+				this.newAcc.username = account.account_username;
+				this.newAcc.password = account.account_password;
+				this.newAcc.originalPrice = account.original_price;
+				this.newAcc.date_purchased = account.date_purchased
+					.toString()
+					.substr(0, 10);
+				this.newAcc.date_expires = account.date_expires
+					.toString()
+					.substr(0, 10);
+			},
 			checkDate(account) {
 				return (new Date(account.date_expires) - Date.now()) / 86400000 <= 2;
 			},

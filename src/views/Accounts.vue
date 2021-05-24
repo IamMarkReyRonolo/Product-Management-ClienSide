@@ -2,7 +2,12 @@
 	<div class="account">
 		<div class="post">
 			<div v-if="load" class="loading">
-				Loading...
+				<v-progress-circular
+					:size="70"
+					:width="7"
+					color="blue"
+					indeterminate
+				></v-progress-circular>
 			</div>
 
 			<div v-if="error" class="error">

@@ -20,7 +20,13 @@
 			</v-btn>
 			<v-dialog v-model="dialog" persistent max-width="600px">
 				<template v-slot:activator="{ on, attrs }">
-					<v-btn color="dark" dark v-bind="attrs" v-on="on">
+					<v-btn
+						color="dark"
+						dark
+						v-bind="attrs"
+						v-on="on"
+						@click="setFormEmpty()"
+					>
 						Add Customer
 					</v-btn>
 				</template>
@@ -440,6 +446,14 @@
 			search: "",
 		}),
 		methods: {
+			setFormEmpty() {
+				this.newCustomer = {
+					customer_firstname: "",
+					customer_lastname: "",
+					customer_phone: "",
+					customer_email: "",
+				};
+			},
 			setDefaultValues(customer) {
 				this.newCustomer = customer;
 			},

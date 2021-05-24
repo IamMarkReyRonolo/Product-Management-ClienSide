@@ -66,7 +66,16 @@
 												: 'normal'
 										"
 									>
-										Expires: {{ account.date_expires.toString().substr(0, 10) }}
+										Expires:
+										{{
+											new Date(account.date_expires).toString().split(" ")[1]
+										}}
+										{{
+											new Date(account.date_expires).toString().split(" ")[2]
+										}},
+										{{
+											new Date(account.date_expires).toString().split(" ")[3]
+										}}
 									</p>
 								</div>
 							</v-img>

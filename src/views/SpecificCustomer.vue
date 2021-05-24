@@ -138,16 +138,36 @@
 								<h3 class="con">{{ account.profile.subscription_price }}</h3>
 								<h3 class="con">
 									{{
-										account.profile.subscription_purchased
+										new Date(account.profile.subscription_purchased)
 											.toString()
-											.substr(0, 10)
+											.split(" ")[1]
+									}}
+									{{
+										new Date(account.profile.subscription_purchased)
+											.toString()
+											.split(" ")[2]
+									}},
+									{{
+										new Date(account.profile.subscription_purchased)
+											.toString()
+											.split(" ")[3]
 									}}
 								</h3>
 								<h3 class="con">
 									{{
-										account.profile.subscription_expires
+										new Date(account.profile.subscription_expires)
 											.toString()
-											.substr(0, 10)
+											.split(" ")[1]
+									}}
+									{{
+										new Date(account.profile.subscription_expires)
+											.toString()
+											.split(" ")[2]
+									}},
+									{{
+										new Date(account.profile.subscription_expires)
+											.toString()
+											.split(" ")[3]
 									}}
 								</h3>
 							</v-card>

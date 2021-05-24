@@ -68,7 +68,13 @@
 
 								<v-dialog v-model="dialog" max-width="500px">
 									<template v-slot:activator="{ on, attrs }">
-										<v-btn color="dark" light v-bind="attrs" v-on="on">
+										<v-btn
+											color="dark"
+											light
+											v-bind="attrs"
+											v-on="on"
+											@click="setFormEmpty()"
+										>
 											Add Account
 										</v-btn>
 									</template>
@@ -367,6 +373,18 @@
 			AccountingView,
 		},
 		methods: {
+			setFormEmpty() {
+				this.account = {
+					name: "",
+					type: "",
+					username: "",
+					password: "",
+					originalPrice: 0,
+
+					datePurchased: new Date().toISOString().substr(0, 10),
+					dateExpires: new Date().toISOString().substr(0, 10),
+				};
+			},
 			redirectError() {
 				if (this.error.message == "Request failed with status code 404") {
 					this.$router.push("/notfound");

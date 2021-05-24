@@ -20,7 +20,13 @@
 			</v-btn>
 			<v-dialog v-model="dialog" persistent max-width="600px">
 				<template v-slot:activator="{ on, attrs }">
-					<v-btn color="dark" dark v-bind="attrs" v-on="on">
+					<v-btn
+						color="dark"
+						dark
+						v-bind="attrs"
+						v-on="on"
+						@click="setFormEmpty()"
+					>
 						Add Product
 					</v-btn>
 				</template>
@@ -385,6 +391,10 @@
 
 			setDefaultValues(product) {
 				this.productName = product.product_name;
+			},
+
+			setFormEmpty() {
+				this.productName = "";
 			},
 			async addProduct() {
 				try {

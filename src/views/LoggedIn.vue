@@ -19,6 +19,9 @@
 				app
 				color="grey darken-4
 "
+				absolute
+				bottom
+				temporary
 				dark
 			>
 				<template v-slot:prepend>

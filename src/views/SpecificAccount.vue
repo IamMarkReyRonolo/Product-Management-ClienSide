@@ -110,13 +110,15 @@
 						<div class="buttons extension" v-show="edit"></div>
 					</div>
 
-					<v-card
+					<router-link
+						:to="'/customers/' + customer.id"
+						custom
+						v-slot="{ navigate }"
 						v-for="customer in account.customers"
 						:key="customer.id"
-						:to="'/customers/' + customer.id"
 						exact
 					>
-						<div class="division">
+						<div class="division" @click="navigate" role="link">
 							<div
 								class="profiles"
 								:class="
@@ -384,7 +386,7 @@
 								</div>
 							</div>
 						</div>
-					</v-card>
+					</router-link>
 
 					<div class="division">
 						<div class="addProf">
@@ -471,6 +473,7 @@
 																		v-model="profile.subscription_purchased"
 																		class="dateInput"
 																		required
+																		@change="setDefaultExpiration()"
 																	/>
 																</v-col>
 
@@ -676,6 +679,17 @@
 			};
 		},
 		methods: {
+			setDefaultExpiration() {
+				this.profile.subscription_expires =
+					new Date(this.profile.subscription_purchased).getTime() +
+					86400000 * 30;
+
+				this.profile.subscription_expires = new Date(
+					this.profile.subscription_expires
+				)
+					.toISOString()
+					.substr(0, 10);
+			},
 			setFormEmpty() {
 				this.profile = {
 					profile_pin: "",
@@ -939,8 +953,8 @@
 		width: 100%;
 	}
 
-	.profiles,
-	.addProf {
+	.addProf,
+	.profiles {
 		display: flex;
 		justify-content: space-evenly;
 		align-items: center;
@@ -973,9 +987,9 @@
 
 	.division {
 		display: flex;
-
-		margin: 2px 0px;
+		margin: 5px 0px;
 		padding: 0px;
+		border-radius: 20px;
 	}
 
 	.buttons {

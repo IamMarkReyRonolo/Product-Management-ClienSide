@@ -97,7 +97,7 @@
 			<div v-if="load" class="loading">
 				<v-sheet
 					:color="`grey ${theme.isDark ? 'darken-2' : 'lighten-4'}`"
-					class="pa-3"
+					class="pa-5"
 				>
 					<v-row>
 						<v-col v-for="n in 12" :key="n" cols="3">
@@ -617,7 +617,8 @@
 		text-align: center;
 		font-size: 20px;
 		padding: 20px;
-		margin: 50px 0px;
+		margin: 50px auto;
+		width: 90%;
 	}
 
 	.searchCon {

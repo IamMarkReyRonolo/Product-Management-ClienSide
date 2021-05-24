@@ -608,7 +608,8 @@
 		text-align: center;
 		font-size: 20px;
 		padding: 20px;
-		margin: 50px 0px;
+		margin: 50px auto;
+		width: 90%;
 	}
 
 	.emptyContainer {

@@ -26,6 +26,12 @@
 		</div>
 
 		<div v-if="fetched" class="">
+			<v-btn
+				@click="hasHistory() ? $router.go(-1) : $router.push('/')"
+				class="my-5 btn btn-outline-success"
+			>
+				&laquo; Back
+			</v-btn>
 			<h1 class="display-2 font-weight-bold">{{ account.account_name }}</h1>
 			<div class="container1">
 				<div class="inner">
@@ -638,6 +644,9 @@
 			};
 		},
 		methods: {
+			hasHistory() {
+				return window.history.length > 2;
+			},
 			setDefaultValues(profile) {
 				this.profile.profile_pin = profile.profile_pin;
 				this.profile.subscription_status = profile.subscription_status;
@@ -859,7 +868,7 @@
 	}
 
 	h1 {
-		margin-top: 50px;
+		margin-top: 0px;
 	}
 
 	.profileContainer {

@@ -26,221 +26,304 @@
 		</div>
 
 		<div v-if="fetched" class="specificCustomer">
-			<div class="sideContainer">
-				<v-card max-width="280" class="mx-auto">
-					<v-img
-						src="https://wgsi.utoronto.ca/wp-content/uploads/2020/12/blank-profile-picture-png.png"
-						height="220px"
-						dark
-					>
-						<div class="customerNameCon">
-							<div class="nameContent">
-								{{ customer.customer_firstname }}
-								{{ customer.customer_lastname }}
+			<v-btn
+				@click="hasHistory() ? $router.go(-1) : $router.push('/')"
+				class="my-5 btn btn-outline-success"
+			>
+				&laquo; Back
+			</v-btn>
+
+			<div class="fetchedContainer">
+				<div class="sideContainer">
+					<v-card max-width="280" class="mx-auto">
+						<v-img
+							src="https://wgsi.utoronto.ca/wp-content/uploads/2020/12/blank-profile-picture-png.png"
+							height="220px"
+							dark
+						>
+							<div class="customerNameCon">
+								<div class="nameContent">
+									{{ customer.customer_firstname }}
+									{{ customer.customer_lastname }}
+								</div>
 							</div>
-						</div>
-					</v-img>
+						</v-img>
 
-					<v-list two-line>
-						<v-list-item>
-							<v-list-item-icon>
-								<v-icon color="dark">
-									mdi-phone
-								</v-icon>
-							</v-list-item-icon>
+						<v-list two-line>
+							<v-list-item>
+								<v-list-item-icon>
+									<v-icon color="dark">
+										mdi-phone
+									</v-icon>
+								</v-list-item-icon>
 
-							<v-list-item-content>
-								<v-list-item-title>{{
-									customer.customer_phone
-								}}</v-list-item-title>
-								<v-list-item-subtitle>Mobile</v-list-item-subtitle>
-							</v-list-item-content>
-						</v-list-item>
+								<v-list-item-content>
+									<v-list-item-title>{{
+										customer.customer_phone
+									}}</v-list-item-title>
+									<v-list-item-subtitle>Mobile</v-list-item-subtitle>
+								</v-list-item-content>
+							</v-list-item>
 
-						<v-divider inset></v-divider>
+							<v-divider inset></v-divider>
 
-						<v-list-item>
-							<v-list-item-icon>
-								<v-icon color="dark">
-									mdi-email
-								</v-icon>
-							</v-list-item-icon>
+							<v-list-item>
+								<v-list-item-icon>
+									<v-icon color="dark">
+										mdi-email
+									</v-icon>
+								</v-list-item-icon>
 
-							<v-list-item-content>
-								<v-list-item-title>{{
-									customer.customer_email
-								}}</v-list-item-title>
-								<v-list-item-subtitle>Personal</v-list-item-subtitle>
-							</v-list-item-content>
-						</v-list-item>
+								<v-list-item-content>
+									<v-list-item-title>{{
+										customer.customer_email
+									}}</v-list-item-title>
+									<v-list-item-subtitle>Personal</v-list-item-subtitle>
+								</v-list-item-content>
+							</v-list-item>
 
-						<v-divider inset></v-divider>
+							<v-divider inset></v-divider>
 
-						<v-list-item>
-							<v-list-item-icon> </v-list-item-icon>
+							<v-list-item>
+								<v-list-item-icon> </v-list-item-icon>
 
-							<v-list-item-content> </v-list-item-content>
-						</v-list-item>
-					</v-list>
-				</v-card>
-			</div>
-			<div class="mainContainer">
-				<div class="head">
-					<h1>Profiles</h1>
-					<v-btn color="dark" light class="editButton" @click="editProfile">
-						Edit
-					</v-btn>
+								<v-list-item-content> </v-list-item-content>
+							</v-list-item>
+						</v-list>
+					</v-card>
 				</div>
-
-				<div class="profiles">
-					<div class="division">
-						<div class="headings">
-							<h3 class="header">Account</h3>
-							<h3 class="header">Pin</h3>
-							<h3 class="header">Status</h3>
-							<h3 class="header">Price</h3>
-							<h3 class="header">Date Purchased</h3>
-							<h3 class="header">Date Expires</h3>
-						</div>
-						<div class="buttons extension" v-show="edit"></div>
+				<div class="mainContainer">
+					<div class="head">
+						<h1>Profiles</h1>
+						<v-btn color="dark" light class="editButton" @click="editProfile">
+							Edit
+						</v-btn>
 					</div>
 
-					<div
-						v-for="account in customer.accounts"
-						:key="account.id"
-						v-show="customer.accounts.length != 0"
-						class="division"
-					>
-						<v-card
-							class="content"
-							:class="
-								Date.now() > new Date(account.profile.subscription_expires)
-									? 'error'
-									: checkDate(account)
-									? 'warning'
-									: ''
-							"
-							:to="`/products/${account.productId}/accounts/${account.id}`"
+					<div class="profiles">
+						<div class="division">
+							<div class="headings">
+								<h3 class="header">Account</h3>
+								<h3 class="header">Pin</h3>
+								<h3 class="header">Status</h3>
+								<h3 class="header">Price</h3>
+								<h3 class="header">Date Purchased</h3>
+								<h3 class="header">Date Expires</h3>
+							</div>
+							<div class="buttons extension" v-show="edit"></div>
+						</div>
+
+						<div
+							v-for="account in customer.accounts"
+							:key="account.id"
+							v-show="customer.accounts.length != 0"
+							class="division"
 						>
-							<h3 class="con">
-								{{ account.account_name }}
-							</h3>
-							<h3 class="con">{{ account.profile.profile_pin }}</h3>
-							<h3 class="con">{{ account.profile.subscription_status }}</h3>
-							<h3 class="con">{{ account.profile.subscription_price }}</h3>
-							<h3 class="con">
-								{{
-									account.profile.subscription_purchased
-										.toString()
-										.substr(0, 10)
-								}}
-							</h3>
-							<h3 class="con">
-								{{
-									account.profile.subscription_expires.toString().substr(0, 10)
-								}}
-							</h3>
-						</v-card>
-						<div class="buttons" v-show="edit">
-							<div class="icoCon">
-								<div class="ico">
-									<v-dialog
-										transition="dialog-bottom-transition"
-										max-width="550"
-									>
-										<template v-slot:activator="{ on, attrs }">
-											<v-btn
-												color="success"
-												fab
-												x-small
-												dark
-												v-bind="attrs"
-												v-on="on"
-												@click="setDefaultValues(account.profile)"
-												><v-icon>mdi-pencil</v-icon></v-btn
-											>
-										</template>
-
-										<template v-slot:default="dialog">
-											<v-card dark>
-												<form
-													action=""
-													@submit.prevent="
-														updateProfile(account.id, customer.id)
-													"
-													enctype="multipart/form-data"
+							<v-card
+								class="content"
+								:class="
+									Date.now() > new Date(account.profile.subscription_expires)
+										? 'error'
+										: checkDate(account)
+										? 'warning'
+										: ''
+								"
+								:to="`/products/${account.productId}/accounts/${account.id}`"
+							>
+								<h3 class="con">
+									{{ account.account_name }}
+								</h3>
+								<h3 class="con">{{ account.profile.profile_pin }}</h3>
+								<h3 class="con">{{ account.profile.subscription_status }}</h3>
+								<h3 class="con">{{ account.profile.subscription_price }}</h3>
+								<h3 class="con">
+									{{
+										account.profile.subscription_purchased
+											.toString()
+											.substr(0, 10)
+									}}
+								</h3>
+								<h3 class="con">
+									{{
+										account.profile.subscription_expires
+											.toString()
+											.substr(0, 10)
+									}}
+								</h3>
+							</v-card>
+							<div class="buttons" v-show="edit">
+								<div class="icoCon">
+									<div class="ico">
+										<v-dialog
+											transition="dialog-bottom-transition"
+											max-width="550"
+										>
+											<template v-slot:activator="{ on, attrs }">
+												<v-btn
+													color="success"
+													fab
+													x-small
+													dark
+													v-bind="attrs"
+													v-on="on"
+													@click="setDefaultValues(account.profile)"
+													><v-icon>mdi-pencil</v-icon></v-btn
 												>
-													<v-card-title>
-														<span class="headline">Update Profile</span>
+											</template>
+
+											<template v-slot:default="dialog">
+												<v-card dark>
+													<form
+														action=""
+														@submit.prevent="
+															updateProfile(account.id, customer.id)
+														"
+														enctype="multipart/form-data"
+													>
+														<v-card-title>
+															<span class="headline">Update Profile</span>
+														</v-card-title>
+														<v-card-text>
+															<v-container>
+																<v-row>
+																	<v-col cols="12">
+																		<v-text-field
+																			label="Profile Pin*"
+																			v-model="profile.profile_pin"
+																			required
+																			dense
+																			outlined
+																		></v-text-field>
+																	</v-col>
+
+																	<v-col cols="12">
+																		<v-select
+																			label="Profile Status*"
+																			outlined
+																			dense
+																			:items="options"
+																			v-model="profile.subscription_status"
+																		></v-select>
+																	</v-col>
+
+																	<v-col cols="12">
+																		<v-text-field
+																			label="Subscription Price*"
+																			v-model="profile.subscription_price"
+																			required
+																			dense
+																			outlined
+																		></v-text-field>
+																	</v-col>
+
+																	<!--  -->
+
+																	<v-col cols="6">
+																		<p>Subscription Purchased*</p>
+																		<input
+																			type="date"
+																			name=""
+																			id=""
+																			v-model="profile.subscription_purchased"
+																			class="dateInput"
+																		/>
+																	</v-col>
+
+																	<!--  -->
+
+																	<v-col cols="6">
+																		<p>Subscription Expires*</p>
+																		<input
+																			type="date"
+																			name=""
+																			id=""
+																			v-model="profile.subscription_expires"
+																			class="dateInput"
+																		/>
+																	</v-col>
+
+																	<!--  -->
+																</v-row>
+															</v-container>
+															<small>*indicates required field</small>
+														</v-card-text>
+														<v-card-actions>
+															<v-spacer></v-spacer>
+															<v-btn
+																color="white darken-4"
+																text
+																@click="dialog.value = false"
+															>
+																Cancel
+															</v-btn>
+
+															<v-btn
+																:disabled="dialog3"
+																:loading="dialog3"
+																class="white--text"
+																color="white darken-4"
+																text
+																type="submit"
+															>
+																Save Profile
+															</v-btn>
+															<v-dialog
+																v-model="dialog3"
+																hide-overlay
+																persistent
+																width="300"
+															>
+																<v-card color="white" light>
+																	<v-card-text>
+																		<p mt-5>
+																			Updating profile. Please wait.
+																		</p>
+																		<v-progress-linear
+																			indeterminate
+																			color="black"
+																			class="mb-0 mt-5"
+																		></v-progress-linear>
+																	</v-card-text>
+																</v-card>
+															</v-dialog>
+														</v-card-actions>
+													</form>
+												</v-card>
+											</template>
+										</v-dialog>
+									</div>
+
+									<div class="ico">
+										<v-dialog persistent max-width="290">
+											<template v-slot:activator="{ on, attrs }">
+												<v-btn
+													color="error"
+													fab
+													x-small
+													dark
+													v-bind="attrs"
+													v-on="on"
+												>
+													<v-icon dark>
+														mdi-minus
+													</v-icon>
+												</v-btn>
+											</template>
+
+											<template v-slot:default="dialog">
+												<v-card dark>
+													<v-card-title class="headline">
+														Delete Profile?
 													</v-card-title>
-													<v-card-text>
-														<v-container>
-															<v-row>
-																<v-col cols="12">
-																	<v-text-field
-																		label="Profile Pin*"
-																		v-model="profile.profile_pin"
-																		required
-																		dense
-																		outlined
-																	></v-text-field>
-																</v-col>
-
-																<v-col cols="12">
-																	<v-select
-																		label="Profile Status*"
-																		outlined
-																		dense
-																		:items="options"
-																		v-model="profile.subscription_status"
-																	></v-select>
-																</v-col>
-
-																<v-col cols="12">
-																	<v-text-field
-																		label="Subscription Price*"
-																		v-model="profile.subscription_price"
-																		required
-																		dense
-																		outlined
-																	></v-text-field>
-																</v-col>
-
-																<!--  -->
-
-																<v-col cols="6">
-																	<p>Subscription Purchased*</p>
-																	<input
-																		type="date"
-																		name=""
-																		id=""
-																		v-model="profile.subscription_purchased"
-																		class="dateInput"
-																	/>
-																</v-col>
-
-																<!--  -->
-
-																<v-col cols="6">
-																	<p>Subscription Expires*</p>
-																	<input
-																		type="date"
-																		name=""
-																		id=""
-																		v-model="profile.subscription_expires"
-																		class="dateInput"
-																	/>
-																</v-col>
-
-																<!--  -->
-															</v-row>
-														</v-container>
-														<small>*indicates required field</small>
-													</v-card-text>
+													<v-card-text
+														>Deleting this profile will delete all records
+														including the recorded profile from the
+														customer.</v-card-text
+													>
 													<v-card-actions>
 														<v-spacer></v-spacer>
 														<v-btn
-															color="white darken-4"
+															color="white darken-1"
 															text
 															@click="dialog.value = false"
 														>
@@ -248,26 +331,27 @@
 														</v-btn>
 
 														<v-btn
-															:disabled="dialog3"
-															:loading="dialog3"
+															:disabled="dialog5"
+															:loading="dialog5"
 															class="white--text"
-															color="white darken-4"
+															color="red darken-1"
 															text
 															type="submit"
+															@click="
+																deleteProfile(account.id, customer.id, dialog)
+															"
 														>
-															Save Profile
+															Delete
 														</v-btn>
 														<v-dialog
-															v-model="dialog3"
+															v-model="dialog5"
 															hide-overlay
 															persistent
 															width="300"
 														>
 															<v-card color="white" light>
 																<v-card-text>
-																	<p mt-5>
-																		Updating profile. Please wait.
-																	</p>
+																	<p mt-5>Deleting profile. Please wait.</p>
 																	<v-progress-linear
 																		indeterminate
 																		color="black"
@@ -276,101 +360,28 @@
 																</v-card-text>
 															</v-card>
 														</v-dialog>
-													</v-card-actions>
-												</form>
-											</v-card>
-										</template>
-									</v-dialog>
-								</div>
 
-								<div class="ico">
-									<v-dialog persistent max-width="290">
-										<template v-slot:activator="{ on, attrs }">
-											<v-btn
-												color="error"
-												fab
-												x-small
-												dark
-												v-bind="attrs"
-												v-on="on"
-											>
-												<v-icon dark>
-													mdi-minus
-												</v-icon>
-											</v-btn>
-										</template>
-
-										<template v-slot:default="dialog">
-											<v-card dark>
-												<v-card-title class="headline">
-													Delete Profile?
-												</v-card-title>
-												<v-card-text
-													>Deleting this profile will delete all records
-													including the recorded profile from the
-													customer.</v-card-text
-												>
-												<v-card-actions>
-													<v-spacer></v-spacer>
-													<v-btn
-														color="white darken-1"
-														text
-														@click="dialog.value = false"
-													>
-														Cancel
-													</v-btn>
-
-													<v-btn
-														:disabled="dialog5"
-														:loading="dialog5"
-														class="white--text"
-														color="red darken-1"
-														text
-														type="submit"
-														@click="
-															deleteProfile(account.id, customer.id, dialog)
-														"
-													>
-														Delete
-													</v-btn>
-													<v-dialog
-														v-model="dialog5"
-														hide-overlay
-														persistent
-														width="300"
-													>
-														<v-card color="white" light>
-															<v-card-text>
-																<p mt-5>Deleting profile. Please wait.</p>
-																<v-progress-linear
-																	indeterminate
-																	color="black"
-																	class="mb-0 mt-5"
-																></v-progress-linear>
-															</v-card-text>
-														</v-card>
-													</v-dialog>
-
-													<!-- <v-btn
+														<!-- <v-btn
 														color="red darken-1"
 														text
 														@click="dialog4 = false"
 													>
 														Agree
 													</v-btn> -->
-												</v-card-actions>
-											</v-card>
-										</template>
-									</v-dialog>
+													</v-card-actions>
+												</v-card>
+											</template>
+										</v-dialog>
+									</div>
 								</div>
 							</div>
 						</div>
-					</div>
 
-					<div class="emptyLogsCon" v-if="customer.accounts.length == 0">
-						<img src="../assets/empty3.svg" alt="" />
-						<p>Oops, looks like this customer has no profiles yet.</p>
-						<p>Add this customer to an account now!</p>
+						<div class="emptyLogsCon" v-if="customer.accounts.length == 0">
+							<img src="../assets/empty3.svg" alt="" />
+							<p>Oops, looks like this customer has no profiles yet.</p>
+							<p>Add this customer to an account now!</p>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -414,6 +425,9 @@
 			};
 		},
 		methods: {
+			hasHistory() {
+				return window.history.length > 2;
+			},
 			setDefaultValues(profile) {
 				this.profile.profile_pin = profile.profile_pin;
 				this.profile.subscription_status = profile.subscription_status;
@@ -521,7 +535,9 @@
 	.specificCustomer {
 		margin: 50px auto;
 		width: 90%;
+	}
 
+	.fetchedContainer {
 		justify-content: center;
 		display: flex;
 	}

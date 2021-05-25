@@ -96,11 +96,11 @@
 		methods: {
 			async getUser() {
 				try {
-					this.loading = true;
+					this.load = true;
 					const user = await userAPI.prototype.getUser();
 					this.user = user.data;
 					this.fetched = this.user;
-					this.loading = false;
+					this.load = false;
 				} catch (error) {
 					this.error = error;
 					this.loading = false;

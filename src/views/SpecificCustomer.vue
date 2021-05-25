@@ -134,7 +134,16 @@
 									{{ account.account_name }}
 								</h3>
 								<h3 class="con">{{ account.profile.profile_pin }}</h3>
-								<h3 class="con">{{ account.profile.subscription_status }}</h3>
+								<h3
+									class="con"
+									:class="
+										account.profile.subscription_status == 'Unpaid'
+											? 'unpaid'
+											: ''
+									"
+								>
+									{{ account.profile.subscription_status }}
+								</h3>
 								<h3 class="con">{{ account.profile.subscription_price }}</h3>
 								<h3 class="con">
 									{{
@@ -714,6 +723,14 @@
 		justify-content: center;
 		align-items: center;
 		text-align: center;
+	}
+
+	.unpaid {
+		color: red;
+		padding: 2px;
+		border-radius: 5px;
+		background-color: #1e1e1e;
+		font-weight: bold;
 	}
 
 	/*  */

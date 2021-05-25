@@ -134,7 +134,15 @@
 									{{ customer.customer_lastname }}
 								</h3>
 								<h3>{{ customer.profile.profile_pin }}</h3>
-								<h3>{{ customer.profile.subscription_status }}</h3>
+								<h3
+									:class="
+										customer.profile.subscription_status == 'Unpaid'
+											? 'unpaid'
+											: ''
+									"
+								>
+									{{ customer.profile.subscription_status }}
+								</h3>
 
 								<h3>{{ customer.profile.subscription_price }}</h3>
 								<h3>

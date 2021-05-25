@@ -102,10 +102,6 @@
 					this.error.message == "Request failed with status code 401"
 				) {
 					this.$router.push("/accessdenied");
-				} else if (this.error.message == "Network Error") {
-					this.text = this.error.message;
-					this.timeout = 5000;
-					this.snackbar = true;
 				}
 			},
 			async getUser() {

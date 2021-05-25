@@ -41,10 +41,7 @@
 										<v-img
 											class="white--text align-end"
 											height="200px"
-											:src="
-												'https://product-management-server.herokuapp.com/' +
-													product.product_image.split('/')[4]
-											"
+											:src="product.product_image"
 										>
 										</v-img>
 									</v-card>

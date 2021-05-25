@@ -10,7 +10,7 @@
 		</div>
 
 		<div v-if="error" class="error">
-			{{ this.$router.push("/accessdenied") }}
+			{{ redirectError() }}
 		</div>
 
 		<div v-if="fetched" class="">
@@ -94,6 +94,20 @@
 			error: null,
 		}),
 		methods: {
+			redirectError() {
+				console.log(this.error.message);
+				if (this.error.message == "Request failed with status code 404") {
+					this.$router.push("/notfound");
+				} else if (
+					this.error.message == "Request failed with status code 401"
+				) {
+					this.$router.push("/accessdenied");
+				} else if (this.error.message == "Network Error") {
+					this.text = this.error.message;
+					this.timeout = 5000;
+					this.snackbar = true;
+				}
+			},
 			async getUser() {
 				try {
 					this.load = true;

@@ -148,10 +148,7 @@
 									<v-img
 										class="white--text align-end"
 										height="200px"
-										:src="
-											'https://product-management-server.herokuapp.com/' +
-												product.product_image.split('/')[4]
-										"
+										:src="product.product_image"
 									>
 									</v-img>
 								</router-link>
@@ -399,12 +396,15 @@
 			async addProduct() {
 				try {
 					this.dialog2 = true;
-					const formData = new FormData();
-					formData.append("product_name", this.productName);
-					formData.append("product_image", this.productImage);
+
+					const data = {
+						product_name: this.productName,
+						product_image: this.productImage,
+					};
+
 					this.result = await productAPI.prototype.addProduct(
 						this.userId,
-						formData
+						data
 					);
 					this.text = "Successfully added product";
 					this.dialog2 = false;
@@ -424,6 +424,11 @@
 			},
 			imageFile(file) {
 				this.productImage = file;
+				const reader = new FileReader();
+				reader.readAsDataURL(file);
+				reader.onloadend = () => {
+					this.productImage = reader.result;
+				};
 			},
 			async updateProduct(id) {
 				try {

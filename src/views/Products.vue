@@ -433,13 +433,15 @@
 			async updateProduct(id) {
 				try {
 					this.dialog3 = true;
-					const formData = new FormData();
-					formData.append("product_name", this.productName);
-					formData.append("product_image", this.productImage);
+					const data = {
+						product_name: this.productName,
+						product_image: this.productImage,
+					};
+
 					await productAPI.prototype.updateSpecificProduct(
 						this.userId,
 						id,
-						formData
+						data
 					);
 					this.text = "Successfully updated product";
 					this.dialog3 = false;

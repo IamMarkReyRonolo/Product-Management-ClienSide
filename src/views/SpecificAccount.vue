@@ -1057,4 +1057,12 @@
 	.buttonlabel {
 		margin: auto;
 	}
+
+	.unpaid {
+		color: red;
+		padding: 2px;
+		border-radius: 5px;
+		background-color: #1e1e1e;
+		font-weight: bold;
+	}
 </style>

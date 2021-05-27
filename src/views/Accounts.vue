@@ -400,7 +400,10 @@
 				this.edit = !this.edit;
 			},
 			async getProductAccounting(id) {
-				const result = await accountingAPI.prototype.getAccounting(id);
+				const result = await accountingAPI.prototype.getAccounting(
+					this.userId,
+					id
+				);
 				this.productAccounting.accounting = result.data.accounting;
 				this.productAccounting.logs = result.data.logs;
 			},
@@ -439,7 +442,11 @@
 						date_expires: new Date(this.account.dateExpires + "Z"),
 					};
 
-					this.result = await accountsAPI.prototype.addAccount(this.id, data);
+					this.result = await accountsAPI.prototype.addAccount(
+						this.userId,
+						this.id,
+						data
+					);
 					this.getProductAccounting(this.id);
 
 					this.text = "Successfully added account";

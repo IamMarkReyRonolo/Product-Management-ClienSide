@@ -7,7 +7,6 @@ export default class API {
 	async getAllProducts(userId) {
 		const link = url + `${userId}/products`;
 		const products = await axios.get(link);
-
 		return products.data.products;
 	}
 
@@ -18,19 +17,19 @@ export default class API {
 	}
 
 	async getSpecificProduct(userId, id) {
-		const link = url + ` ${userId}/products/${id}`;
+		const link = url + `${userId}/products/${id}`;
 		const products = await axios.get(link);
 		return products;
 	}
 
 	async updateSpecificProduct(userId, id, updates) {
-		const link = url + ` ${userId}/products/${id}`;
+		const link = url + `${userId}/products/${id}`;
 		const products = await axios.patch(link, updates);
 		return products;
 	}
 
 	async deleteSpecificProduct(userId, id) {
-		const link = url + ` ${userId}/products/${id}`;
+		const link = url + `${userId}/products/${id}`;
 		const products = await axios.delete(link);
 		return products;
 	}

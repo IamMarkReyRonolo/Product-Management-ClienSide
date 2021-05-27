@@ -4,9 +4,13 @@ axios.defaults.headers.common["auth-token"] =
 	"Bearer " + localStorage.getItem("token");
 
 export default class API {
-	async updateSpecificProfile(accountId, id, updates) {
+	async updateSpecificProfile(userId, productId, accountId, id, updates) {
 		const api =
 			"https://product-management-server.herokuapp.com/api/" +
+			userId +
+			"/" +
+			productId +
+			"/" +
 			accountId +
 			"/customers/" +
 			id +
@@ -14,9 +18,13 @@ export default class API {
 		const products = await axios.patch(api, updates);
 		return products;
 	}
-	async deleteSpecificProfile(accountId, id) {
+	async deleteSpecificProfile(userId, productId, accountId, id) {
 		const api =
 			"https://product-management-server.herokuapp.com/api/" +
+			userId +
+			"/" +
+			productId +
+			"/" +
 			accountId +
 			"/customers/" +
 			id +
@@ -25,10 +33,12 @@ export default class API {
 		return products;
 	}
 
-	async addNewCustomer(userId, id, data) {
+	async addNewCustomer(userId, productId, id, data) {
 		const url =
 			"https://product-management-server.herokuapp.com/api/" +
 			userId +
+			"/" +
+			productId +
 			"/" +
 			id +
 			"/customers/create";
@@ -36,10 +46,12 @@ export default class API {
 		return account;
 	}
 
-	async addExistingCustomer(userId, accountId, customerId, data) {
+	async addExistingCustomer(userId, productId, accountId, customerId, data) {
 		const url =
 			"https://product-management-server.herokuapp.com/api/" +
 			userId +
+			"/" +
+			productId +
 			"/" +
 			accountId +
 			"/customers/" +

@@ -41,8 +41,6 @@
 </template>
 
 <script>
-	import accountingAPI from "../api/accountingAPI";
-
 	export default {
 		name: "AccountingView",
 		props: {
@@ -57,13 +55,7 @@
 				componentKey: 0,
 			};
 		},
-		methods: {
-			async getProductAccounting(id) {
-				const result = await accountingAPI.prototype.getAccounting(id);
-				this.accounting = result.data.accounting;
-				this.logs = result.data.logs;
-			},
-		},
+		methods: {},
 
 		mounted() {
 			console.log("Mark Rey Ronolo");

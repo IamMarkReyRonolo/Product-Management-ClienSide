@@ -752,6 +752,7 @@
 					if (this.addExisting) {
 						await profileAPI.prototype.addExistingCustomer(
 							this.userId,
+							this.$route.params.id,
 							this.account.id,
 							this.selectedCustomerId,
 							this.profile
@@ -770,6 +771,7 @@
 						};
 						await profileAPI.prototype.addNewCustomer(
 							this.userId,
+							this.$route.params.id,
 							this.account.id,
 							data
 						);
@@ -824,6 +826,8 @@
 					this.dialog3 = true;
 
 					await profileAPI.prototype.updateSpecificProfile(
+						this.userId,
+						this.$route.params.id,
 						accountId,
 						id,
 						this.profile
@@ -849,7 +853,12 @@
 				try {
 					this.dialog5 = true;
 					dialog.value = false;
-					await profileAPI.prototype.deleteSpecificProfile(accountId, id);
+					await profileAPI.prototype.deleteSpecificProfile(
+						this.userId,
+						this.$route.params.id,
+						accountId,
+						id
+					);
 
 					this.text = "Successfully deleted profile";
 					this.dialog5 = false;

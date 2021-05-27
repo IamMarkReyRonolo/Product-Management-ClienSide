@@ -1,5 +1,5 @@
 import axios from "axios";
-const url = " https://product-management-server.herokuapp.com/api/users";
+const url = "https://product-management-server.herokuapp.com/api/users";
 axios.defaults.headers.common["auth-token"] =
 	"Bearer " + localStorage.getItem("token");
 
@@ -17,7 +17,7 @@ export default class API {
 	async getUser() {
 		axios.defaults.headers.common["auth-token"] =
 			"Bearer " + localStorage.getItem("token");
-		const user = await axios.get(url + "/user");
+		const user = await axios.get(url + "/" + localStorage.getItem("token"));
 		return user;
 	}
 }

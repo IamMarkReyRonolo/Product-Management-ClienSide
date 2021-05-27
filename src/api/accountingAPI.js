@@ -4,8 +4,10 @@ axios.defaults.headers.common["auth-token"] =
 	"Bearer " + localStorage.getItem("token");
 
 export default class API {
-	async getAccounting(productId) {
-		const product = await axios.get(url + productId + "/accounting");
+	async getAccounting(userId, productId) {
+		const product = await axios.get(
+			url + userId + "/" + productId + "/accounting"
+		);
 		return product;
 	}
 }

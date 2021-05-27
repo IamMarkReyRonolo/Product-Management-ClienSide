@@ -205,7 +205,11 @@
 													<form
 														action=""
 														@submit.prevent="
-															updateProfile(account.id, customer.id)
+															updateProfile(
+																account.productId,
+																account.id,
+																customer.id
+															)
 														"
 														enctype="multipart/form-data"
 													>
@@ -367,7 +371,12 @@
 															text
 															type="submit"
 															@click="
-																deleteProfile(account.id, customer.id, dialog)
+																deleteProfile(
+																	account.productId,
+																	account.id,
+																	customer.id,
+																	dialog
+																)
 															"
 														>
 															Delete
@@ -512,12 +521,14 @@
 				}
 			},
 
-			async updateProfile(accountId, id) {
+			async updateProfile(productId, accountId, id) {
 				try {
 					this.dialog3 = true;
 					id;
 
 					await profileAPI.prototype.updateSpecificProfile(
+						this.userId,
+						productId,
 						accountId,
 						id,
 						this.profile
@@ -539,11 +550,16 @@
 					this.snackbar = true;
 				}
 			},
-			async deleteProfile(accountId, id, dialog) {
+			async deleteProfile(productId, accountId, id, dialog) {
 				try {
 					this.dialog5 = true;
 					dialog.value = false;
-					await profileAPI.prototype.deleteSpecificProfile(accountId, id);
+					await profileAPI.prototype.deleteSpecificProfile(
+						this.userId,
+						productId,
+						accountId,
+						id
+					);
 
 					this.text = "Successfully deleted profile";
 					this.dialog5 = false;

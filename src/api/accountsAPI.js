@@ -10,20 +10,25 @@ export default class API {
 		return account;
 	}
 
-	async addAccount(id, newAccount) {
-		const account = await axios.post(url + id + "/accounts/", newAccount);
+	async addAccount(userId, id, newAccount) {
+		const account = await axios.post(
+			url + userId + "/" + id + "/accounts/",
+			newAccount
+		);
 		return account;
 	}
 
-	async updateSpecificAccount(id, accountId, updates) {
+	async updateSpecificAccount(userId, id, accountId, updates) {
 		const account = await axios.patch(
-			url + id + "/accounts/" + accountId,
+			url + userId + "/" + id + "/accounts/" + accountId,
 			updates
 		);
 		return account;
 	}
-	async deleteSpecificAccount(id, accountId) {
-		const account = await axios.delete(url + id + "/accounts/" + accountId);
+	async deleteSpecificAccount(userId, id, accountId) {
+		const account = await axios.delete(
+			url + userId + "/" + id + "/accounts/" + accountId
+		);
 		return account;
 	}
 }

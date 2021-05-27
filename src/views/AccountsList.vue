@@ -396,6 +396,7 @@
 					dialog.value = false;
 					const productId = this.id;
 					await accountsAPI.prototype.deleteSpecificAccount(
+						this.userId,
 						productId,
 						accountId
 					);
@@ -429,6 +430,7 @@
 					};
 
 					await accountsAPI.prototype.updateSpecificAccount(
+						this.userId,
 						productId,
 						accountId,
 						data

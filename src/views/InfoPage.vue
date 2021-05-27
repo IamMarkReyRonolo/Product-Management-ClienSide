@@ -139,6 +139,12 @@
 
 					<br />
 				</div>
+
+				<div class="systemDiv">
+					<h2>System Architecture</h2>
+					<br />
+					<img src="../assets/systemarchitecture.png" />
+				</div>
 			</div>
 			<footer>
 				<div class="icon">
@@ -253,6 +259,11 @@
 
 	.erd img {
 		width: 1000px;
+		margin: auto;
+	}
+
+	.systemDiv img {
+		width: 900px;
 		margin: auto;
 	}
 </style>
